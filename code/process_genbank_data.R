@@ -3,13 +3,12 @@ library(cowplot)
 library(reshape2)
 library(stringr)
 
-
 # Read B HA sequence data from Genbank:
 B_seq_data <- read.csv('../data/genbank_data/genbank_B_HA_seqs.csv', header =T)
 B_seq_data <- as.tibble(B_seq_data)
 
 # Use Gisaid B data to map countries to continents and resolve country name inconsistencies
-source('process_gisaid_metadata.R')
+gisaid_B_data <- as.tibble(read.csv('../data/gisaid_metadata/gisaid_metadata.csv', header = T))
 country_and_continents <- gisaid_B_data %>% select(country, continent) %>% unique()
 
 # Read output of blastn against Vic/87 and Yam/88 strains:

@@ -1,4 +1,5 @@
 *.pdf
+*.Rhistory
 *.svg
 *.pptx
 *._.DS_Store
