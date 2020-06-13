@@ -3,7 +3,7 @@
 *.pptx
 *._.DS_Store
 *.DS_Store
-results
+results/model_fits/
 figures
 *.out
 *.err
@@ -12,8 +12,7 @@ figures
 *.htm
 *._*
 *.pyc
-code/meta_download.py
-code/io_util.py
+code/sbatch_files/
 data/gisaid_metadata/metadata_files/
 data/case_data/Marshfield_flu_B_cases.csv
 data/case_data/Marshfield_cases.csv

@@ -3,7 +3,7 @@ library(tidyr)
 # Merges gisaid metadata files into a single file
 
 
-years_downloaded <- as.character(seq(1980,2018))
+years_downloaded <- as.character(seq(1980,2019))
 years_downloaded <- c('pre_1980', years_downloaded)
 
 gisaid_B_data <- tibble()
