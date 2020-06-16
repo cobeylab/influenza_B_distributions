@@ -95,53 +95,46 @@ nz_data_untyped_assigned <- nz_data_untyped_assigned %>%
   
 # New Zealand only (all surveillance)
 # Remove non-sentinel data from 2012 to avoid overlap with data batch for 2012-2019
-nz_sent_nonsent <- nz_data %>%
+nz_data %>%
   filter(!(SurveillanceType == 'Other Influenza Surveillance' & observation_year == 2012)) %>%
   group_by(country, region, observation_year, cohort_type,
            cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_sent_nonsent, '../results/processed_data/case_data_batches/case_data_nz_2001-2012_all_surveillance.csv', row.names = F)
+  summarise(n_cases = sum(n_cases)) %>%
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_all_surveillance.csv', row.names = F)
 
 # New Zealand only (sentinel only)
-nz_sentinel_only <- nz_data %>%
+nz_data %>%
   filter(SurveillanceType == 'Sentinel Surveillance') %>%
-  group_by(country, region, observation_year, cohort_type,
-           cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_sentinel_only , '../results/processed_data/case_data_batches/case_data_nz_2001-2012_sentinel_only.csv', row.names = F)
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_sentinel_only.csv', row.names = F)
 
 # New Zealand only (nonsentinel only)
 # Remove non-sentinel data from 2012 to avoid overlap with data batch for 2012-2019
-nz_nonsentinel_only <- nz_data %>%
+nz_data %>%
   filter(SurveillanceType == 'Other Influenza Surveillance', observation_year != 2012) %>%
-  group_by(country, region, observation_year, cohort_type,
-           cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_nonsentinel_only , '../results/processed_data/case_data_batches/case_data_nz_2001-2012_nonsentinel_only.csv', row.names = F)
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_nonsentinel_only.csv', row.names = F)
 
 # ------------- New Zealand data with untyped cases assigned where possible --------------
 # All surveillance, removing non-sentinel data from 2012 to avoid overlap with data batch for 2012-2019
-nz_sent_nonsent_untyped_assigned <- nz_data_untyped_assigned %>%
+nz_data_untyped_assigned %>%
   filter(!(SurveillanceType == 'Other Influenza Surveillance' & observation_year == 2012)) %>%
   group_by(country, region, observation_year, cohort_type,
            cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_sent_nonsent_untyped_assigned , '../results/processed_data/case_data_batches/case_data_nz_2001-2012_all_surveillance_untyped_assigned.csv', row.names = F)
+  summarise(n_cases = sum(n_cases)) %>%
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_all_surveillance_untyped_assigned.csv', row.names = F)
 
 # Sentinel only with untyped cases assigned where possible: (sentinel only)
-nz_sentinel_only_untyped_assigned <- nz_data_untyped_assigned %>%
+nz_data_untyped_assigned %>%
   filter(SurveillanceType == 'Sentinel Surveillance') %>%
   group_by(country, region, observation_year, cohort_type,
            cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_sentinel_only_untyped_assigned , '../results/processed_data/case_data_batches/case_data_nz_2001-2012_sentinel_only_untyped_assigned.csv', row.names = F)
+  summarise(n_cases = sum(n_cases)) %>%
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_sentinel_only_untyped_assigned.csv', row.names = F)
 
 # Non-sentinel only with untyped cases assigned where possible: (nonsentinel only)
-
-nz_nonsentinel_only_untyped_assigned <- nz_data_untyped_assigned %>%
+nz_data_untyped_assigned %>%
   # Remove non-sentinel data from 2012 to avoid overlap with data batch for 2012-2019
   filter(SurveillanceType == 'Other Influenza Surveillance', observation_year != 2012) %>%
   group_by(country, region, observation_year, cohort_type,
            cohort_value, minimum_birth_year, lineage) %>%
-  summarise(n_cases = sum(n_cases))
-write.csv(nz_nonsentinel_only_untyped_assigned , '../results/processed_data/case_data_batches/case_data_nz_2001-2012_nonsentinel_only_untyped_assigned.csv', row.names = F)
+  summarise(n_cases = sum(n_cases)) %>%
+  write.csv('../results/processed_data/case_data_batches/case_data_nz_2001-2012_nonsentinel_only_untyped_assigned.csv', row.names = F)
