@@ -2,9 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(cowplot)
 theme_set(theme_cowplot())
-library(stringr)
 library(tidyr)
-library(reshape2)
 
 # New Zealand Data from ESR in 2012-2019, with type of surveillance information.
 esr_nz_data <- as_tibble(read.csv('../data/case_data/nz_data_2012-2019_batch.csv', header = T)) %>%
@@ -69,11 +67,13 @@ nz_data %>%
 # Sentinel (GP only)
 nz_data %>% 
   filter(lineage != 'unknown', severity == 'GP consultation') %>%
+  select(-severity) %>%
   write.csv('../results/processed_data/case_data_batches/case_data_nz_2012-2019_sentinel_only.csv', row.names = F)
 
 # Non-sentinel (hospital admission, referred to as non-sentinel for consistency with pre-2012 data but technically part of sentinel surveillance)
 nz_data %>% 
   filter(lineage != 'unknown', severity == 'Hospital admission') %>%
+  select(-severity) %>%
   write.csv('../results/processed_data/case_data_batches/case_data_nz_2012-2019_nonsentinel_only.csv', row.names = F)
 
 # --------- Exporting data with unidentified cases assigned where possible ----------
@@ -88,10 +88,12 @@ nz_data_untyped_assigned %>%
 # Sentinel (GP only)
 nz_data_untyped_assigned %>% 
   filter(lineage != 'unknown', severity == 'GP consultation') %>%
+  select(-severity) %>%
   write.csv('../results/processed_data/case_data_batches/case_data_nz_2012-2019_sentinel_only_untyped_assigned.csv', row.names = F)
 
 # Non-sentinel (hospital admission)
 nz_data_untyped_assigned %>% 
   filter(lineage != 'unknown', severity == 'Hospital admission') %>%
+  select(-severity) %>%
   write.csv('../results/processed_data/case_data_batches/case_data_nz_2012-2019_nonsentinel_only_untyped_assigned.csv', row.names = F)
 

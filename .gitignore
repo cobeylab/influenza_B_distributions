@@ -16,6 +16,7 @@ figures
 code/sbatch_files/
 data/gisaid_metadata/metadata_files/
 data/case_data/nz_data_2001-2012_batch/ESR_nz_data_surveillance_type.csv
+data/case_data/Vijaykrishna2015_Australian_cases.tsv
 data/ESR_data_2017-19.xlsx
 data/case_data/nz_data_2001-2012_batch.csv
 data/case_data/nz_data_2012-2019_batch.csv
