@@ -26,6 +26,6 @@ year,A_isolates,B_isolates,total_A_or_B,A_fraction_in_flu,B_fraction_in_flu,flu_
 2014,3673,471,4144,0.886341699,0.113658301,0.372,0.329719112,0.042280888,1680,29768,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2014.pdf
 2015,2551,2892,5443,0.468675363,0.531324637,0.508,0.238087084,0.269912916,2012,55304,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2015.pdf
 2016,2475,329,2804,0.882667618,0.117332382,0.32,0.282453638,0.037546362,1383,15221,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2016.pdf
-2017,NA,149,516,NA,0.288759689922481,0.201,NA,0.058040697674419,NA,NA,percent_B_in_flu_weekly.csv
-2018,NA,31,317,NA,0.097791798107256,0.225,NA,0.022003154574133,NA,NA,percent_B_in_flu_weekly.csv
-2019,NA,152,523,NA,0.290630975143403,0.213,NA,0.061904397705545,NA,NA,percent_B_in_flu_weekly.csv
+2017,NA,149,516,NA,0.28875969,0.201,NA,0.058040698,NA,NA,percent_B_in_flu_weekly_nz.csv
+2018,NA,31,317,NA,0.097791798,0.225,NA,0.022003155,NA,NA,percent_B_in_flu_weekly_nz.csv
+2019,NA,152,523,NA,0.290630975,0.213,NA,0.061904398,NA,NA,percent_B_in_flu_weekly_nz.csv

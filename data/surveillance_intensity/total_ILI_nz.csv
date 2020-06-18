@@ -14,6 +14,6 @@ season,ILI_per_100K,source
 2014,30.6,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2014.pdf
 2015,56.3,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2015.pdf
 2016,14.8,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2016.pdf
-2017,31.46,ILI_rates_weekly.csv
-2018,16.44,ILI_rates_weekly.csv
-2019,25.82,ILI_rates_weekly.csv
+2017,31.46,ILI_rates_weekly_nz.csv
+2018,16.44,ILI_rates_weekly_nz.csv
+2019,25.82,ILI_rates_weekly_nz.csv
