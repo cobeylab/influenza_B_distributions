@@ -4,7 +4,7 @@ library(stringr)
 parameter_bounds <- tibble(
   parameter = c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","gamma_AV", "gamma_AY","beta1","beta2",
                 "beta3", "reporting_factor_us","reporting_factor_aus","reporting_factor_nz"),
-  lower_bound = c(rep(0,8), rep(1e-4,6)),
+  lower_bound = c(rep(0,11), rep(1e-4,3)),
   upper_bound = c(rep(1,8), rep(0.75,3), rep(50,3))
 )
 
