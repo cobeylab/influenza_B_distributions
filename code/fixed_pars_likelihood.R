@@ -49,7 +49,21 @@ print(paste('BOUNDED PARS', bounded_par_names))
 # Read tibble with bounds to sample initial parameters from
 initial_par_bounds <- as_tibble(read.csv(initial_par_bounds_path))
 
+# If pre-computed history probabilities are being used, read them
+if(precomputed_history_probs_path == 'NA'){precomputed_history_probs_path = NA}
+if(!is.na(precomputed_history_probs_path)){
+  print(precomputed_history_probs_path)
+  precomputed_history_probs = as_tibble(read.csv(precomputed_history_probs_path))
+}else{
+  precomputed_history_probs = NULL
+}
+
+# Initialize constrained parameter names and constrained parameter values based on profiled parameters
+constrained_par_names <- selected_par_names
+constrained_par_values <- selected_par_values
+
 # Change parameter bounds (abs. bounds, not initial par bounds) if non-default bounds were provided
+# (For a parameter with equal lower and upper bounds, simply add parameter to vector of constrained parameters)
 bounded_par_names <- ifelse(bounded_par_names == 'NA',NA, bounded_par_names)
 bounded_par_lbounds <- ifelse(bounded_par_lbounds == 'NA',NA, bounded_par_lbounds)
 bounded_par_ubounds <- ifelse(bounded_par_ubounds == 'NA',NA, bounded_par_ubounds)
@@ -63,13 +77,19 @@ if(!is.na(bounded_par_names)){
   bounded_par_ubounds <- strsplit(bounded_par_ubounds, split = ',')[[1]]
   
   for(i in 1:length(bounded_par_names)){
-    if(bounded_par_lbounds[i] != 'default'){
-      parameter_bounds$lower_bound[parameter_bounds$parameter == bounded_par_names[i]] = 
-        as.numeric(bounded_par_lbounds[i])
-    }
-    if(bounded_par_ubounds[i] != 'default'){
-      parameter_bounds$upper_bound[parameter_bounds$parameter == bounded_par_names[i]] =
-        as.numeric(bounded_par_ubounds[i])
+    if(('default' %in% c(bounded_par_lbounds[i], bounded_par_ubounds[i]) == F) &
+       bounded_par_lbounds[i] == bounded_par_ubounds[i]){
+      constrained_par_names <- c(constrained_par_names, bounded_par_names[i])
+      constrained_par_values <- c(constrained_par_values, as.numeric(bounded_par_lbounds[i]))
+    }else{
+      if(bounded_par_lbounds[i] != 'default'){
+        parameter_bounds$lower_bound[parameter_bounds$parameter == bounded_par_names[i]] = 
+          as.numeric(bounded_par_lbounds[i])
+      }
+      if(bounded_par_ubounds[i] != 'default'){
+        parameter_bounds$upper_bound[parameter_bounds$parameter == bounded_par_names[i]] =
+          as.numeric(bounded_par_ubounds[i])
+      }
     }
   }
 }
@@ -86,10 +106,6 @@ stopifnot(length(selected_par_values) == length(selected_par_names))
 # Initialize cluster for optimParallel
 cluster = makeForkCluster(nnodes = n_cores)
 #cluster = makeCluster(nnodes = 9, type = 'FORK')
-
-# Initialize constrained parameter names and constrained parameter values based on profiled parameters
-constrained_par_names <- selected_par_names
-constrained_par_values <- selected_par_values
 
 # If fitting to data from a specific region, constrain unused country-specific parameters to NA
 if(subset_region != 'all'){
@@ -165,6 +181,7 @@ while(convergence == FALSE){
                              season_incidence_curves = season_incidence_curves, school_start_age = school_start_age,
                              oldest_atk_rate_age = oldest_atk_rate_age,
                              reporting_age_cutoff = reporting_age_cutoff,
+                             precomputed_history_probs = precomputed_history_probs,
                              parameter_bounds = parameter_bounds,
                              #method = 'CG',
                              method = 'L-BFGS-B', 
@@ -181,12 +198,12 @@ names(par_estimates) <- free_parameter_names
 
 # Write results
 results <- data.frame(rbind(c(selected_par_values, loglik, selected_model_name,
-                              par_estimates[names(par_estimates) %in% constrained_par_names == F],
-                              rep(NA, length(unused_country_pars))
+                              par_estimates,
+                              constrained_par_values[(constrained_par_names %in% selected_par_names) == F]
                               )))
 colnames(results) <- c(selected_par_names, 'loglik','model',
-                       model_par_names[model_par_names %in% constrained_par_names == F],
-                       unused_country_pars)
+                       free_parameter_names,
+                       constrained_par_names[(constrained_par_names %in% selected_par_names) == F])
 
 write.csv(results,
           file = paste(c(output_directory, paste(selected_par_values, collapse = '_'), '.csv'),

@@ -4,7 +4,7 @@ library(stringr)
 parameter_bounds <- tibble(
   parameter = c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","gamma_AV", "gamma_AY","beta1","beta2",
                 "beta3", "reporting_factor_us","reporting_factor_aus","reporting_factor_nz"),
-  lower_bound = c(rep(0,11), rep(1e-4,3)),
+  lower_bound = c(rep(0,8), rep(1e-4,6)),
   upper_bound = c(rep(1,8), rep(0.75,3), rep(50,3))
 )
 
@@ -218,7 +218,8 @@ upper_bounds <- function(par_names, parameter_bounds){
 # Function implementing main model. Passed to loglik functions.
 main_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
                        intensity_scores, cutoff_age, maternal_ab_duration, season_incidence_curves,
-                       school_start_age, oldest_atk_rate_age, reporting_age_cutoff){
+                       school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                       precomputed_history_probs){
   
   R_V <- parameters[1]
   R_Y <- parameters[2]
@@ -240,20 +241,30 @@ main_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
   chi_AV = chi_V * gamma_AV
   chi_AY = chi_Y * gamma_AY
   
-  # Calculate exposure history probabilities
-  data_plus_improbs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
-                                        lineage_frequencies = lineage_frequencies,
-                                        intensity_scores = intensity_scores,
-                                        chi_VY = chi_VY, chi_YV = chi_YV,
-                                        chi_AV = chi_AV, chi_AY = chi_AY,
-                                        beta1 = beta1, beta2 = beta2, beta3 = beta3,
-                                        cutoff_age = cutoff_age,
-                                        maternal_ab_duration = maternal_ab_duration,
-                                        season_incidence_curves = season_incidence_curves,
-                                        school_start_age = school_start_age,
-                                        oldest_atk_rate_age = oldest_atk_rate_age,
-                                        birth_year_cutoff = birth_year_cutoff)
-  
+  if(is.null(precomputed_history_probs)){
+    # Calculate exposure history probabilities
+    data_plus_improbs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
+                                          lineage_frequencies = lineage_frequencies,
+                                          intensity_scores = intensity_scores,
+                                          chi_VY = chi_VY, chi_YV = chi_YV,
+                                          chi_AV = chi_AV, chi_AY = chi_AY,
+                                          beta1 = beta1, beta2 = beta2, beta3 = beta3,
+                                          cutoff_age = cutoff_age,
+                                          maternal_ab_duration = maternal_ab_duration,
+                                          season_incidence_curves = season_incidence_curves,
+                                          school_start_age = school_start_age,
+                                          oldest_atk_rate_age = oldest_atk_rate_age,
+                                          birth_year_cutoff = birth_year_cutoff)
+  }else{
+    data_plus_improbs <- left_join(dem_plus_case_data, 
+                                   precomputed_history_probs,
+                                   by = c("country", "observation_year",
+                                         "cohort_type", "cohort_value")) %>%
+      rename(obs_cases = n_cases) %>%
+      select(country, region, observation_year, cohort_type, cohort_value, lineage,
+             obs_cases, CLY_total_cases, rel_pop_size, everything())
+  }
+
   # Distribute chi's and R's as columns
   data_plus_protection <- data_plus_improbs %>%
     mutate(R_V, R_Y, chi_V, chi_Y, chi_VY, chi_YV, chi_AV, chi_AY)
@@ -280,7 +291,8 @@ main_model_par_names <-   c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","g
 # Log-likelihood function by country / observation year / lineage combination (and surveillance type, if applicable)
 neg_loglik_function_by_obs_year <- function(parameters, model_function, dem_plus_case_data,
                                             lineage_frequencies, intensity_scores,cutoff_age, maternal_ab_duration,
-                                            season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff){
+                                            season_incidence_curves, school_start_age, oldest_atk_rate_age,
+                                            reporting_age_cutoff, precomputed_history_probs){
   
   multinomial_draw_unit <- c('country', 'lineage', 'observation_year')
   if("SurveillanceType" %in% names(dem_plus_case_data)){
@@ -291,7 +303,8 @@ neg_loglik_function_by_obs_year <- function(parameters, model_function, dem_plus
                                            lineage_frequencies = lineage_frequencies, intensity_scores = intensity_scores,
                                            cutoff_age = cutoff_age, maternal_ab_duration = maternal_ab_duration,
                                            season_incidence_curves = season_incidence_curves, school_start_age = school_start_age,
-                                           oldest_atk_rate_age = oldest_atk_rate_age, reporting_age_cutoff = reporting_age_cutoff) %>% 
+                                           oldest_atk_rate_age = oldest_atk_rate_age, reporting_age_cutoff = reporting_age_cutoff,
+                                           precomputed_history_probs) %>% 
     # Calculate log-likelihood separately for each country/lineage/observation year
     group_by_at(vars(multinomial_draw_unit)) %>%
     # ...under a multinomial distribution
@@ -304,13 +317,14 @@ neg_loglik_function_by_obs_year <- function(parameters, model_function, dem_plus
 # Negative log-likelihood function (optim minimizes function by default) 
 neg_loglik_function <- function(parameters, model_function, dem_plus_case_data,
                                 lineage_frequencies, intensity_scores,cutoff_age, maternal_ab_duration,
-                                season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff){
+                                season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                                precomputed_history_probs){
   
   # Compute predicted probabilities
   loglik <- neg_loglik_function_by_obs_year(parameters, model_function, dem_plus_case_data,
                                             lineage_frequencies, intensity_scores,cutoff_age, maternal_ab_duration,
                                             season_incidence_curves, school_start_age, oldest_atk_rate_age,
-                                            reporting_age_cutoff) %>%
+                                            reporting_age_cutoff,  precomputed_history_probs) %>%
     # Sum log-likelihoods across countries/lineages/observation years
     summarise(loglik = sum(loglik)) %>% 
     # Pull total log-likelihood
@@ -325,13 +339,14 @@ neg_loglik_function <- function(parameters, model_function, dem_plus_case_data,
 constrained_loglik_function <- function(free_parameters, model_function, model_par_names, selected_par_names,
                                         selected_par_values,dem_plus_case_data, lineage_frequencies,
                                         intensity_scores,cutoff_age, maternal_ab_duration, season_incidence_curves,
-                                        school_start_age, oldest_atk_rate_age, reporting_age_cutoff, parameter_bounds){
+                                        school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                                        precomputed_history_probs, parameter_bounds){
   
   free_parameter_names = model_par_names[model_par_names %in% selected_par_names == F]
   # If any free parameter value is outside of bounds, set loglik to NA
   if(any(free_parameters - lower_bounds(free_parameter_names, parameter_bounds) < -1e-7) |
      any(free_parameters - upper_bounds(free_parameter_names, parameter_bounds) > 1e-7)){
-    loglik <- NA # Optim's default is to minimize, not maximize, thus returning +Inf
+    loglik <- NA 
   }else{
     full_parameters <- rep(NA, length(model_par_names))
     
@@ -350,7 +365,8 @@ constrained_loglik_function <- function(free_parameters, model_function, model_p
                                                        season_incidence_curves = season_incidence_curves,
                                                        school_start_age = school_start_age,
                                                        oldest_atk_rate_age = oldest_atk_rate_age,
-                                                       reporting_age_cutoff = reporting_age_cutoff))
+                                                       reporting_age_cutoff = reporting_age_cutoff,
+                                                       precomputed_history_probs = precomputed_history_probs))
   }
   gc()
   return(loglik)

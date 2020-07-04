@@ -3,27 +3,34 @@
 library(stringr)
 
 args <- commandArgs(trailingOnly = T)
+args[args == 'NA'] <- NA
 
-case_data_path = args[1] # case_data_path = '../results/processed_data/case_data.csv'
+case_data_path = args[1] # case_data_path = '../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv'
 demographic_data_path = args[2] #demographic_data_path = '../results/processed_data/demographic_data.csv'
 intensity_scores_path = args[3] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
-lineage_frequencies_path = args[4] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_surveillance.csv'
+lineage_frequencies_path = args[4] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
 season_incidence_curves_path = args[5] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
 start_birth_year = as.numeric(args[6]) # Earliest birth year in case data to analyze
 subset_region = args[7]
 reporting_age_cutoff = as.numeric(args[8]) # Differential reporting if age <= reporting_age_cutoff
+precomputed_history_probs_path = args[9] # precomputed_history_probs_path = '../results/model_fits/post1952_nz_data_all_surveillance_untyped_assigned_noVicin1990s/main_model/MLE_history_probs.csv'
 
-selected_model_name = args[9] # Model name (see model_functions.R)
-selected_par_names = args[10] # Comma-separated list of selected parameter names selected_par_names <- "Vic_against_Vic_protection,Yam_against_Vic_protection"
-lower_limits = args[11] # Comma-separated list of lower bounds for parameter values 
-upper_limits = args[12] # Comma-separated list of upper bounds for parameter values 
-increments = args[13] # Comma-separated values for the increment between par1 and par2 values
-output_directory <- args[14]
-n_cores <- as.integer(args[15])
-initial_par_bounds_path = as.character(args[16])
-bounded_par_names <- as.character(args[17]) # Comma-separated list of pars with non-default bounds
-bounded_par_lbounds <- as.character(args[18]) # Comma-separated list of lower non-default bounds 
-bounded_par_ubounds <- as.character(args[19]) # Comma-separated list of upper non-default bounds
+selected_model_name = args[10] # Model name (see model_functions.R)
+selected_par_names = args[11] # Comma-separated list of selected parameter names selected_par_names <- "Vic_against_Vic_protection,Yam_against_Vic_protection"
+lower_limits = args[12] # Comma-separated list of lower bounds for parameter values 
+upper_limits = args[13] # Comma-separated list of upper bounds for parameter values 
+increments = args[14] # Comma-separated values for the increment between par1 and par2 values
+output_directory <- args[15]
+n_cores <- as.integer(args[16])
+initial_par_bounds_path = as.character(args[17])
+bounded_par_names <- as.character(args[18]) # Comma-separated list of pars with non-default bounds
+bounded_par_lbounds <- as.character(args[19]) # Comma-separated list of lower non-default bounds 
+bounded_par_ubounds <- as.character(args[20]) # Comma-separated list of upper non-default bounds
+
+if(!is.na(precomputed_history_probs_path) & is.na(bounded_par_names)){
+  stop('Must constrain betas if using pre-computed infection history probabilities')
+}
+
 
 # Separate strings of parameter bounds into numeric vector
 lower_limits <- as.numeric(strsplit(lower_limits, split = ',')[[1]])
@@ -66,6 +73,7 @@ generate_par_files <- function(lower_limits, upper_limits, increments, selected_
                  paste0("season_incidence_curves_path = '", season_incidence_curves_path, "'"),
                  paste0("subset_region = '", subset_region, "'"),
                  paste0("reporting_age_cutoff = ", reporting_age_cutoff),
+                 paste0("precomputed_history_probs_path = '", precomputed_history_probs_path,"'"),
                  paste0("start_birth_year = ", start_birth_year),
                  paste0("selected_model_name = '", selected_model_name,"'"),
                  paste0("selected_par_names = '", selected_par_names, "'"),

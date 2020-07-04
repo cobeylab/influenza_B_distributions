@@ -11,6 +11,7 @@ figures
 *.RData
 *.html
 *.htm
+*.~*
 *._*
 *.pyc
 code/sbatch_files/

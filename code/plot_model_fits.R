@@ -27,17 +27,18 @@ CI_alpha <- 0.05
 
 args = commandArgs(trailingOnly = T)
 
-model_fitting_results_dir = args[1] # model_fitting_results_dir = '../results/model_fits/post1970_ausnz_data_minus_sentinel/main_model/'
-case_data_path = args[2] # case_data_path = '../results/processed_data/case_data_minus_sentinel.csv'
+model_fitting_results_dir = args[1] # model_fitting_results_dir = '../results/model_fits/post1952_nz_data_all_surveillance_untyped_assigned_noVicin1990s/main_model/'
+case_data_path = args[2] #e.g. case_data_path = '../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv'
 demographic_data_path = args[3] # demographic_data_path = '../results/processed_data/demographic_data.csv'
 intensity_scores_path = args[4] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
-lineage_frequencies_path = args[5] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank.csv'
+lineage_frequencies_path = args[5] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
 season_incidence_curves_path = args[6] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
 subset_region = args[7] # subset_region = 'AUSNZ'
-start_birth_year = args[8] # minimum birth year that was considered in model fitting (required to normalize dem. data)
-constrained_pars = args[9] # Comma-separated string of parameters to constrain, if any
-constrained_par_values = args[10] # Comma-separated values of constrained parameters, if any
-constraint_type = args[11] # Soft: look for best values of remaining parameters
+reporting_age_cutoff = args[8]
+start_birth_year = args[9] # minimum birth year that was considered in model fitting (required to normalize dem. data)
+constrained_pars = args[10] # Comma-separated string of parameters to constrain, if any
+constrained_par_values = args[11] # Comma-separated values of constrained parameters, if any
+constraint_type = args[12] # Soft: look for best values of remaining parameters
                           # Hard: keep remaining parameters at global MLE
 
 constrained_pars = str_split(constrained_pars, ',')[[1]]
@@ -112,19 +113,56 @@ main <- function(){
   model_par_names <- get(paste(model, '_model_par_names', sep = ''))  
   
   mle_pars <- get_MLE_parameters(combined_profile)
-  
-  write.csv(tibble(par = model_par_names, value = mle_pars),
-            paste0(plot_directory,'pars.csv'), row.names = F)
-  
-  
   # Replace numbers for NAs for irrelevant parameters  (e.g. reporting factor in NZ when looking at Aus only)
   # Won't affect model fit.
   mle_pars[is.na(mle_pars)] <- 0
+  write.csv(tibble(par = model_par_names, value = mle_pars),
+            paste0(plot_directory,'pars.csv'), row.names = F)
+  
+  # Compute and export history probabilities under the MLE
+  R_V <- mle_pars[1]
+  R_Y <- mle_pars[2]
+  chi_V <- mle_pars[3]
+  chi_Y <- mle_pars[4]
+  gamma_VY <- mle_pars[5]
+  gamma_YV <-  mle_pars[6]
+  gamma_AV <- mle_pars[7]
+  gamma_AY <- mle_pars[8]
+  beta1 <- mle_pars[9]
+  beta2 <-  mle_pars[10]
+  beta3 <-  mle_pars[11]
+  reporting_factor_us <-  mle_pars[12]
+  reporting_factor_aus <-  mle_pars[13]
+  reporting_factor_nz <-  mle_pars[14]
+  
+  chi_VY = chi_Y * gamma_VY
+  chi_YV = chi_V * gamma_YV
+  chi_AV = chi_V * gamma_AV
+  chi_AY = chi_Y * gamma_AY
+
+  history_probs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
+                                       lineage_frequencies = lineage_frequencies,
+                                       intensity_scores = intensity_scores,
+                                       chi_VY = chi_VY, chi_YV = chi_YV,
+                                       chi_AV = chi_AV, chi_AY = chi_AY,
+                                       beta1 = beta1, beta2 = beta2, beta3 = beta3,
+                                       cutoff_age = cutoff_age,
+                                       maternal_ab_duration = maternal_ab_duration,
+                                       season_incidence_curves = season_incidence_curves,
+                                       school_start_age = school_start_age,
+                                       oldest_atk_rate_age = oldest_atk_rate_age,
+                                       birth_year_cutoff = birth_year_cutoff)
+  
+  history_probs <- history_probs %>% select(country, observation_year, cohort_type, cohort_value,
+                                            matches('P_')) %>%
+    select(-rel_pop_size) %>% unique()
+  
+  write.csv(history_probs, paste0(model_fitting_results_dir,'/MLE_history_probs.csv'), row.names = F)
   
   # Get model predictions
   predictions <- model_function(parameters = mle_pars, dem_plus_case_data, lineage_frequencies, intensity_scores,
                                 cutoff_age, maternal_ab_duration, season_incidence_curves, school_start_age,
-                                oldest_atk_rate_age, reporting_age_cutoff)
+                                oldest_atk_rate_age, reporting_age_cutoff, precomputed_history_probs = history_probs)
  
   predictions = list(predictions)
   
@@ -214,7 +252,8 @@ main <- function(){
   
   save_plot(paste0(plot_directory,'fraction_cases_pooled_panel.pdf'),
             plot_grid(fraction_cases_pooled + ylab(''),
-                      fraction_cases_pooled_normalized + ylab('') + ylim(0,6)+
+                      fraction_cases_pooled_normalized + ylab('') + 
+                        ylim(0,6)+
                         #scale_y_continuous(breaks = seq(-0.03,0.06,0.03)) +
                         theme(axis.text.y = element_text(size = 8.7)),
                       nrow = 2),
@@ -247,42 +286,6 @@ main <- function(){
     #          cases_by_interval[[i]],
     #          base_height = 7, base_width =7)
   }
-  
-
-  # Plot with number of cases aggregated across obs. years by country
-  cases_by_country <- plot_by_country(predictions, n_CI_replicates, CI_alpha,plot_predictions = F,
-                                       plot_fraction = T, demographic_normalization = T)
-  save_plot(paste0(plot_directory,'normalized_fraction_cases_by_country.pdf'),
-             cases_by_country,
-             base_height = 7, base_width =7)
-  
-  # Plot with fraction of cases aggregated across obs. years by country
-   fraction_by_country <- plot_by_country(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
-                                          plot_fraction = T, demographic_normalization = F)
-   save_plot(paste0(plot_directory,'fraction_cases_by_country.pdf'),
-             fraction_by_country,
-             base_height = 7, base_width =7)
-  
-  #Plot with fraction of cases aggregated across obs. years by country, normalized
-  fraction_by_country_normalized <- plot_by_country(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
-                                                    plot_fraction = T, demographic_normalization = T)
-  save_plot(paste0(plot_directory,'fraction_cases_by_country_normalized.pdf'),
-            fraction_by_country_normalized,
-            base_height = 7, base_width =8)
-  
-  
-  # Plot with number of cases aggregated across obs. years and countries
-  # cases_pooled_normalized <- plot_pooling_countries(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
-  #                                                   plot_fraction = F, demographic_normalization = T)
-  # save_plot(paste0(plot_directory,'cases_pooled_normalized.pdf'),
-  #           cases_pooled_normalized,
-  #           base_height = 3.5, base_width =7)
-  
-  #cases_pooled <- plot_pooling_countries(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
-  #                                       plot_fraction = F, demographic_normalization = F)
-  #save_plot(paste0(plot_directory,'cases_pooled.pdf'),
-  #          cases_pooled ,
-  #          base_height = 3.5, base_width =7)
   
   
 }
