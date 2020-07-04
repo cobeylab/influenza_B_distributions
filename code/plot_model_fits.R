@@ -27,18 +27,11 @@ CI_alpha <- 0.05
 
 args = commandArgs(trailingOnly = T)
 
-model_fitting_results_dir = args[1] # model_fitting_results_dir = '../results/model_fits/post1952_nz_data_all_surveillance_untyped_assigned_noVicin1990s/main_model/'
-case_data_path = args[2] #e.g. case_data_path = '../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv'
-demographic_data_path = args[3] # demographic_data_path = '../results/processed_data/demographic_data.csv'
-intensity_scores_path = args[4] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
-lineage_frequencies_path = args[5] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
-season_incidence_curves_path = args[6] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
-subset_region = args[7] # subset_region = 'AUSNZ'
-reporting_age_cutoff = args[8]
-start_birth_year = args[9] # minimum birth year that was considered in model fitting (required to normalize dem. data)
-constrained_pars = args[10] # Comma-separated string of parameters to constrain, if any
-constrained_par_values = args[11] # Comma-separated values of constrained parameters, if any
-constraint_type = args[12] # Soft: look for best values of remaining parameters
+input_file = args[1] # Input file specifying case data, covariate data, etc.
+# (should be in the same directory as likelihood profiles)
+constrained_pars = args[2] # Comma-separated string of parameters to constrain, if any
+constrained_par_values = args[3] # Comma-separated values of constrained parameters, if any
+constraint_type = args[4] # Soft: look for best values of remaining parameters
                           # Hard: keep remaining parameters at global MLE
 
 constrained_pars = str_split(constrained_pars, ',')[[1]]
@@ -49,12 +42,11 @@ if(all(is.na(constrained_pars)) & !all(is.na(constrained_par_values)) |
   stop('Parameter constraints incorrectly specified.')
 }
 
-plot_directory <- paste0(model_fitting_results_dir, 'model_fit_plots/')
+source(input_file)
+if(precomputed_history_probs_path == 'NA'){precomputed_history_probs_path <- NA}
 
-# If plotting for starting birth year other than the one used to fit the model, save to separate directory
-if(grepl(as.character(start_birth_year), model_fitting_results_dir) == F){
-  plot_directory <- paste0(plot_directory,'fit_to_post',start_birth_year,'_data/')
-}
+profiles_directory <- paste0(dirname(input_file),'/')
+plot_directory <- paste0(dirname(profiles_directory), '/model_fit_plots/')
 
 if(!all(is.na(constrained_pars))){
   constraint_label <- paste0(constraint_type, '_constrained_',
@@ -80,27 +72,8 @@ main <- function(){
   # Combine demographic and case data
   dem_plus_case_data <- merge_data(demographic_data, case_data)
   
-  # If models were fit to specific region, filter dem_plus_case_data accordingly
-  if(subset_region != 'all'){
-    if(subset_region == 'USAUS'){
-      dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-        mutate(region = ifelse(country %in% c('United States','Australia'), 'USAUS',
-                               'New Zealand')) %>% ungroup()
-    }
-    if(subset_region == 'Australia'){
-      dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-        mutate(region = ifelse(country =='Australia','Australia','Other')) %>% ungroup()
-    }
-    if(subset_region == 'New_Zealand'){
-      subset_region = 'New Zealand'
-      dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-        mutate(region = ifelse(country =='New Zealand','New Zealand','Other')) %>% ungroup()
-    }
-    dem_plus_case_data <- dem_plus_case_data %>% filter(region == subset_region)
-  }
-  
   # Read combined likelihood profile
-  combined_profile <- as_tibble(read.csv(paste0(model_fitting_results_dir, 'likelihood_profiles/',
+  combined_profile <- as_tibble(read.csv(paste0(profiles_directory,
                                                 'combined_likelihood_profiles.csv'), header = T))
   # Read model name from profile tibble
   model <- as.character(unique(combined_profile$model))
@@ -119,45 +92,55 @@ main <- function(){
   write.csv(tibble(par = model_par_names, value = mle_pars),
             paste0(plot_directory,'pars.csv'), row.names = F)
   
-  # Compute and export history probabilities under the MLE
-  R_V <- mle_pars[1]
-  R_Y <- mle_pars[2]
-  chi_V <- mle_pars[3]
-  chi_Y <- mle_pars[4]
-  gamma_VY <- mle_pars[5]
-  gamma_YV <-  mle_pars[6]
-  gamma_AV <- mle_pars[7]
-  gamma_AY <- mle_pars[8]
-  beta1 <- mle_pars[9]
-  beta2 <-  mle_pars[10]
-  beta3 <-  mle_pars[11]
-  reporting_factor_us <-  mle_pars[12]
-  reporting_factor_aus <-  mle_pars[13]
-  reporting_factor_nz <-  mle_pars[14]
+  # If no precomputed history probabilities given, compute them
+  if(is.na(precomputed_history_probs_path)){
+    # Compute and export history probabilities under the MLE
+    R_V <- mle_pars[1]
+    R_Y <- mle_pars[2]
+    chi_V <- mle_pars[3]
+    chi_Y <- mle_pars[4]
+    gamma_VY <- mle_pars[5]
+    gamma_YV <-  mle_pars[6]
+    gamma_AV <- mle_pars[7]
+    gamma_AY <- mle_pars[8]
+    beta1 <- mle_pars[9]
+    beta2 <-  mle_pars[10]
+    beta3 <-  mle_pars[11]
+    reporting_factor_us <-  mle_pars[12]
+    reporting_factor_aus <-  mle_pars[13]
+    reporting_factor_nz <-  mle_pars[14]
+    
+    chi_VY = chi_Y * gamma_VY
+    chi_YV = chi_V * gamma_YV
+    chi_AV = chi_V * gamma_AV
+    chi_AY = chi_Y * gamma_AY
+    
+    history_probs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
+                                      lineage_frequencies = lineage_frequencies,
+                                      intensity_scores = intensity_scores,
+                                      chi_VY = chi_VY, chi_YV = chi_YV,
+                                      chi_AV = chi_AV, chi_AY = chi_AY,
+                                      beta1 = beta1, beta2 = beta2, beta3 = beta3,
+                                      cutoff_age = cutoff_age,
+                                      maternal_ab_duration = maternal_ab_duration,
+                                      season_incidence_curves = season_incidence_curves,
+                                      school_start_age = school_start_age,
+                                      oldest_atk_rate_age = oldest_atk_rate_age,
+                                      birth_year_cutoff = birth_year_cutoff)
+    
+    history_probs <- history_probs %>% select(country, observation_year, cohort_type, cohort_value,
+                                              matches('P_')) %>%
+      select(-rel_pop_size) %>% unique()
+    
+    write.csv(history_probs, paste0(dirname(profiles_directory),'/MLE_history_probs.csv'), row.names = F)
+    history_probs_constrained <- NULL # Don't precompute for constrained parameters
+    
+  }else{
+    # If fit was done with precomputed history probabilities (i.e., non-sentinel or sentinel specific fits)
+    history_probs <- as_tibble(read.csv(precomputed_history_probs_path, header = T))
+    history_probs_constrained <- history_probs 
+  }
   
-  chi_VY = chi_Y * gamma_VY
-  chi_YV = chi_V * gamma_YV
-  chi_AV = chi_V * gamma_AV
-  chi_AY = chi_Y * gamma_AY
-
-  history_probs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
-                                       lineage_frequencies = lineage_frequencies,
-                                       intensity_scores = intensity_scores,
-                                       chi_VY = chi_VY, chi_YV = chi_YV,
-                                       chi_AV = chi_AV, chi_AY = chi_AY,
-                                       beta1 = beta1, beta2 = beta2, beta3 = beta3,
-                                       cutoff_age = cutoff_age,
-                                       maternal_ab_duration = maternal_ab_duration,
-                                       season_incidence_curves = season_incidence_curves,
-                                       school_start_age = school_start_age,
-                                       oldest_atk_rate_age = oldest_atk_rate_age,
-                                       birth_year_cutoff = birth_year_cutoff)
-  
-  history_probs <- history_probs %>% select(country, observation_year, cohort_type, cohort_value,
-                                            matches('P_')) %>%
-    select(-rel_pop_size) %>% unique()
-  
-  write.csv(history_probs, paste0(model_fitting_results_dir,'/MLE_history_probs.csv'), row.names = F)
   
   # Get model predictions
   predictions <- model_function(parameters = mle_pars, dem_plus_case_data, lineage_frequencies, intensity_scores,
@@ -185,7 +168,8 @@ main <- function(){
     
     constrained_predictions <- model_function(parameters = constrained_pars, dem_plus_case_data, lineage_frequencies,
                                                    intensity_scores,cutoff_age, maternal_ab_duration, season_incidence_curves,
-                                                   school_start_age, oldest_atk_rate_age, reporting_age_cutoff)
+                                                   school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                                                   precomputed_history_probs = history_probs_constrained)
     
     # Merge global MLE and constrained predictions into single predictions list object
     predictions <- list(predictions[[1]], constrained_predictions)
@@ -194,10 +178,12 @@ main <- function(){
     # Log-likelihood by observation year, country and lineage, for the global MLE and for the constrained mle
     loglik_by_obs_year_global_MLE <- neg_loglik_function_by_obs_year(parameters = mle_pars, model_function, dem_plus_case_data,
                                                           lineage_frequencies, intensity_scores,cutoff_age, maternal_ab_duration,
-                                                          season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff)
+                                                          season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                                                          precomputed_history_probs = history_probs)
     loglik_by_obs_year_constrained <- neg_loglik_function_by_obs_year(parameters = constrained_pars, model_function, dem_plus_case_data,
                                                                      lineage_frequencies, intensity_scores,cutoff_age, maternal_ab_duration,
-                                                                     season_incidence_curves, school_start_age, oldest_atk_rate_age, reporting_age_cutoff)
+                                                                     season_incidence_curves, school_start_age, oldest_atk_rate_age,
+                                                                     reporting_age_cutoff, precomputed_history_probs = history_probs_constrained)
     # Comparison of log-likelihood between MLE and constrained parameters, year by year.
     loglik_by_obs_year <- left_join(loglik_by_obs_year_global_MLE %>% rename(loglik_global_MLE = loglik),
                                     loglik_by_obs_year_constrained %>% rename(loglik_constrained = loglik),

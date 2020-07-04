@@ -11,12 +11,12 @@ library(rlang)
 
 args = commandArgs(trailingOnly = T)
 
-intensity_scores_path = args[1] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
-lineage_frequencies_path = args[2] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank.csv'
-season_incidence_curves_path = args[3] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
-demographic_data_path = args[4] # demographic_data_path = '../results/processed_data/demographic_data.csv'
-birth_year_range = args[5] #String with comma-separated values for the first and last birth year to consider
-birth_year_range = as.numeric(str_split(birth_year_range, ',')[[1]])
+#intensity_scores_path = args[1] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
+#lineage_frequencies_path = args[2] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank.csv'
+#season_incidence_curves_path = args[3] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
+#demographic_data_path = args[4] # demographic_data_path = '../results/processed_data/demographic_data.csv'
+#birth_year_range = args[5] #String with comma-separated values for the first and last birth year to consider
+#birth_year_range = as.numeric(str_split(birth_year_range, ',')[[1]])
 
 
 observation_year = as.numeric(args[6])
