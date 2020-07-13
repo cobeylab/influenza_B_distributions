@@ -115,7 +115,15 @@ main <- function(){
     chi_AV = chi_V * gamma_AV
     chi_AY = chi_Y * gamma_AY
     
-    history_probs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
+    base_iprobs_tibble <- as_tibble(expand.grid(
+      observation_year = seq(min(dem_plus_case_data$observation_year), max(dem_plus_case_data$observation_year)),
+      cohort_value = seq(min(dem_plus_case_data$cohort_value), max(dem_plus_case_data$cohort_value)))) %>%
+      mutate(cohort_type = 'age', country = unique(dem_plus_case_data$country),
+             region = NA, lineage = NA, n_cases = NA, CLY_total_cases = NA, rel_pop_size = NA) %>%
+      arrange(observation_year)
+    
+    
+     history_probs <- calculate_iprobs(dem_plus_case_data = base_iprobs_tibble,
                                       lineage_frequencies = lineage_frequencies,
                                       intensity_scores = intensity_scores,
                                       chi_VY = chi_VY, chi_YV = chi_YV,
@@ -127,6 +135,7 @@ main <- function(){
                                       school_start_age = school_start_age,
                                       oldest_atk_rate_age = oldest_atk_rate_age,
                                       birth_year_cutoff = birth_year_cutoff)
+    
     
     history_probs <- history_probs %>% select(country, observation_year, cohort_type, cohort_value,
                                               matches('P_')) %>%

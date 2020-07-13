@@ -11,14 +11,12 @@ library(rlang)
 
 args = commandArgs(trailingOnly = T)
 
-#intensity_scores_path = args[1] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
-#lineage_frequencies_path = args[2] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank.csv'
-#season_incidence_curves_path = args[3] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
-#demographic_data_path = args[4] # demographic_data_path = '../results/processed_data/demographic_data.csv'
-#birth_year_range = args[5] #String with comma-separated values for the first and last birth year to consider
-#birth_year_range = as.numeric(str_split(birth_year_range, ',')[[1]])
-
-
+intensity_scores_path = args[1] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
+lineage_frequencies_path = args[2] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
+season_incidence_curves_path = args[3] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
+demographic_data_path = args[4] # demographic_data_path = '../results/processed_data/demographic_data.csv'
+birth_year_range = args[5] #String with comma-separated values for the first and last birth year to consider
+birth_year_range = as.numeric(str_split(birth_year_range, ',')[[1]])
 observation_year = as.numeric(args[6])
 pars_file <- as.character(args[7]) 
 
@@ -211,7 +209,8 @@ examples <- iprobs_by_byear %>% mutate(P_Y = P_AVY + P_AY0 + P_VY + P_YV + P_Y0,
   select(country, birth_year, P_Y, P_V, P_V_or_A, P_Y_or_A, P_Y_first, 
          P_V_first, P_A_first, P_V_not_Y, P_Y_not_V, P_naive, rel_suscep_vic, rel_suscep_yam)
 
-left_join(examples %>%
+
+early_90s_cohorts <- left_join(examples %>%
             filter(birth_year >=1987, birth_year <=1993),
           demographic_data %>%
             filter(birth_year >= 1987, birth_year <= 1993) %>%
@@ -231,7 +230,11 @@ left_join(examples %>%
             rel_suscep_vic = sum(rel_suscep_vic*pop_fraction),
             rel_suscep_yam = sum(rel_suscep_yam*pop_fraction))
 
-left_join(examples %>%
+write.csv(early_90s_cohorts,
+          paste0(parent_directory, '/early_90s_cohorts_susceptibility_in_',observation_year,'.csv'),
+          row.names = F)
+
+cohorts_until_mid80s <- left_join(examples %>%
             filter(birth_year <=1986),
           demographic_data %>%
             filter(birth_year <=1986) %>%
@@ -252,5 +255,8 @@ left_join(examples %>%
             rel_suscep_vic = sum(rel_suscep_vic*pop_fraction),
             rel_suscep_yam = sum(rel_suscep_yam*pop_fraction))
 
+write.csv(cohorts_until_mid80s,
+          paste0(parent_directory, '/cohorts_until_mid80s_susceptibility_in_',observation_year,'.csv'),
+          row.names = F)
 
  
