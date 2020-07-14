@@ -281,6 +281,23 @@ main <- function(main_directory, is_synthetic){
             main_panel,
             base_width = 12, base_height = 13)
   
+  
+  # Panel with protection only from pre 1988 exposure
+  pre1988_protection_list = list(profile_plots$gamma_AV +
+                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[VV])~"),"~italic(gamma[AV]))),
+                                 profile_plots$gamma_AY +
+                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
+                                   ylab('')
+  )
+  
+  pre1988_protection <- plot_grid(plotlist = pre1988_protection_list,
+                                  nrow = 1)
+  
+  save_plot(paste0(main_directory,'likelihood_profiles/pre1988_protection.pdf'),
+            pre1988_protection,
+            base_height = 5, base_width = 13)
+  
+  
   rates_factors_plot <- plot_grid(profile_plots$beta1 + 
                                     xlab('Attack rate for 0-5-year-olds') +
                                     ylab('Log-likelihood'),
@@ -299,22 +316,7 @@ main <- function(main_directory, is_synthetic){
                    'likelihood_profiles/attack_rates_and_reporting_factors.pdf'),
             rates_factors_plot ,
             base_width = 12, base_height = 8)
-  
-  
-  # Panel with protection only from pre 1988 exposure
-  pre1988_protection_list = list(profile_plots$gamma_AV +
-                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[VV])~"),"~italic(gamma[AV]))),
-                                 profile_plots$gamma_AY +
-                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
-                                   ylab('')
-  )
-  
-  pre1988_protection <- plot_grid(plotlist = pre1988_protection_list,
-                                  nrow = 1)
-  
-  save_plot(paste0(main_directory,'likelihood_profiles/pre1988_protection.pdf'),
-            pre1988_protection,
-            base_height = 5, base_width = 13)
+
   
   # chi_Y_vs_R_Y <-  profile_plots$R_Y_VS_chi_Y +
   #   ylim(0.1,1) +

@@ -5,6 +5,7 @@
 *._.DS_Store
 *.DS_Store
 results/model_fits/
+results/NZ-Aus_2000s_seqs_phylogenetics/
 figures
 *.out
 *.err
