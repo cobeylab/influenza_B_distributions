@@ -70,9 +70,6 @@ def annotate_tree(tree, lineage_status, isolate_metadata, segment_name):
                     
                 if 'isolate_name' not in node.annotations.values_as_dict().keys():
                     isolate_name = isolate_metadata[isolate_id]['isolate_name']
-                    
-                    print isolate_name
-                
                     node.annotations.add_new('isolate_name', isolate_name)                
                     
             node.annotations.add_new(segment_name + '_lineage', node_lineage)
@@ -103,9 +100,6 @@ def main(argv):
             del metadata['isolate_id']
             isolate_metadata[isolate_id] = metadata
     
-    
-    
-    
     # HA lineage status (which lineage each strain is closest to in HA tree)
     HA_lineage_status = determine_lineage_status(HA_tree, Vic_ref, Yam_ref)
     
@@ -115,14 +109,36 @@ def main(argv):
     # Annotate both trees with both HA and NA lineage status
     HA_annotated_tree = annotate_tree(HA_tree, HA_lineage_status, isolate_metadata, 'HA')
     HA_annotated_tree = annotate_tree(HA_annotated_tree, NA_lineage_status, isolate_metadata, 'NA')
-    
+        
     
     NA_annotated_tree = annotate_tree(NA_tree, HA_lineage_status, isolate_metadata, 'HA')
     NA_annotated_tree = annotate_tree(NA_annotated_tree, NA_lineage_status, isolate_metadata, 'NA')
-    
+
+    # Export annotated trees    
     HA_annotated_tree.write(path = parent_dir + '/annotated_HA_tree.nex', schema = 'nexus')
     NA_annotated_tree.write(path = parent_dir + '/annotated_NA_tree.nex', schema = 'nexus')
  
+    # Export annotated trees just with 2005 strains
+    # Keep B LEE 40 and the Vic and Yam ref strains
+    
+    all_taxon_labels_HA = [node.taxon.label for node in HA_annotated_tree.leaf_nodes()]
+    taxa_to_exclude_HA = [label for label in all_taxon_labels_HA if label.find('2005') == -1]
+    taxa_to_exclude_HA = [l for l in taxa_to_exclude_HA if l.find('LEE') == -1]
+    taxa_to_exclude_HA = [l for l in taxa_to_exclude_HA if l.find('B/Victoria/2/87') == -1]
+    taxa_to_exclude_HA = [l for l in taxa_to_exclude_HA if l.find('B/Yamagata/16/88') == -1]
+    
+    all_taxon_labels_NA = [node.taxon.label for node in NA_annotated_tree.leaf_nodes()]
+    taxa_to_exclude_NA = [label for label in all_taxon_labels_NA if label.find('2005') == -1]
+    taxa_to_exclude_NA = [l for l in taxa_to_exclude_NA if l.find('LEE') == -1]
+    taxa_to_exclude_NA = [l for l in taxa_to_exclude_NA if l.find('B/Victoria/2/87') == -1]
+    taxa_to_exclude_NA = [l for l in taxa_to_exclude_NA if l.find('B/Yamagata/16/88') == -1]
+    
+    HA_annotated_tree.prune_taxa_with_labels(taxa_to_exclude_HA)    
+    HA_annotated_tree.write(path = parent_dir + '/annotated_HA_tree_2005_only.nex', schema = 'nexus')
+    
+    NA_annotated_tree.prune_taxa_with_labels(taxa_to_exclude_NA)    
+    NA_annotated_tree.write(path = parent_dir + '/annotated_NA_tree_2005_only.nex', schema = 'nexus')
+
 
 if(__name__ == "__main__"):
     status = main(sys.argv)
