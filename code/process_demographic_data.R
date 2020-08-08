@@ -59,14 +59,19 @@ demographic_data <- main()
 write.csv(demographic_data, paste0(output_directory, 'demographic_data.csv'), row.names = F)
 
 normalize_demographic_data(demographic_data %>% filter(cohort_value < 90),1500) %>%
-  filter(country %in% c('Australia','New Zealand')) %>%
+  filter(country %in% c('New Zealand')) %>%
   mutate(cohort_value = as.numeric(cohort_value)) %>%
+  mutate(min_birth_year = observation_year - cohort_value - 1) %>%
   group_by(country, observation_year) %>%
-  summarise(mean_age = sum(cohort_value*fraction, na.rm = T)) %>%
-  filter(observation_year >= 2001, observation_year <= 2013) %>%
+  summarise(mean_age = sum(cohort_value*fraction, na.rm = T),
+            mean_birth_year = sum(min_birth_year*fraction, na.rm = T)) %>%
+  filter(observation_year >= 2001, observation_year <= 2019) %>%
   ggplot(aes(x = observation_year, y = mean_age, color = country)) +
   geom_line()+
   geom_point()
+
+
+
 
 
 general_population_age <- normalize_demographic_data(demographic_data, 1900) %>%
