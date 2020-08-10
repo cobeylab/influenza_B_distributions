@@ -22,3 +22,4 @@ data/case_data/Vijaykrishna2015_Australian_cases.tsv
 data/ESR_data_2017-19.xlsx
 data/case_data/nz_data_2001-2012_batch.csv
 data/case_data/nz_data_2012-2019_batch.csv
+results/sequence_divergence/
