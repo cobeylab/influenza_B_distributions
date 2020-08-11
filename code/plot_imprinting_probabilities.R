@@ -19,6 +19,7 @@ birth_year_range = args[5] #String with comma-separated values for the first and
 birth_year_range = as.numeric(str_split(birth_year_range, ',')[[1]])
 observation_year = as.numeric(args[6])
 pars_file <- as.character(args[7]) 
+model <- as.character(args[8]) 
 
 parent_directory = dirname(pars_file)
 

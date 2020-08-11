@@ -286,7 +286,7 @@ main <- function(main_directory, is_synthetic){
   pre1988_protection_list = list(profile_plots$gamma_AV +
                                    xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[VV])~"),"~italic(gamma[AV]))),
                                  profile_plots$gamma_AY +
-                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
+                                   xlab(expression("Protection against B/Yam from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
                                    ylab('')
   )
   

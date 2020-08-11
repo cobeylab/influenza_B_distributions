@@ -227,7 +227,7 @@ main <- function(){
   save_plot(paste0(plot_directory,'fraction_cases_pooled_normalized.pdf'),
             fraction_cases_pooled_normalized +
               ylab('Fraction of cases divided by fraction\nof the population in cohort'),
-            base_height = 4, base_width = 7)
+            base_height = 4, base_width = 8)
   
   # Cases by observation year (NZ)
   cases_by_obs_year_nz <- plot_by_obs_year(predictions, n_CI_replicates, CI_alpha, plot_predictions = T,

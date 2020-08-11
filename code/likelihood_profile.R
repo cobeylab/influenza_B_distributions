@@ -31,7 +31,6 @@ if(!is.na(precomputed_history_probs_path) & is.na(bounded_par_names)){
   stop('Must constrain betas if using pre-computed infection history probabilities')
 }
 
-
 # Separate strings of parameter bounds into numeric vector
 lower_limits <- as.numeric(strsplit(lower_limits, split = ',')[[1]])
 upper_limits <- as.numeric(strsplit(upper_limits, split = ',')[[1]])

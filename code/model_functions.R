@@ -3,7 +3,7 @@ library(stringr)
 
 parameter_bounds <- tibble(
   parameter = c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","gamma_AV", "gamma_AY","beta1","beta2",
-                "beta3", "reporting_factor_us","reporting_factor_aus","reporting_factor_nz"),
+                "beta3", "reporting_factor","reporting_factor_vic","reporting_factor_yam"),
   lower_bound = c(rep(0,8), rep(1e-4,6)),
   upper_bound = c(rep(1,8), rep(0.75,3), rep(50,3))
 )
@@ -117,25 +117,24 @@ calculate_relative_susceptibility <- function(data_plus_protection){
 }
 
 # Function for adding country-specific age effects to model predictions (renormalizes resulting probs)
-add_country_reporting_effect <- function(predictions, reporting_factor_us, reporting_factor_aus,
-                                         reporting_factor_nz, reporting_age_cutoff){
+add_country_reporting_effect <- function(predictions, reporting_factor_vic, reporting_factor_yam, reporting_age_cutoff){
   
-  country_effects <- c(reporting_factor_us, reporting_factor_aus, reporting_factor_nz)
-  names(country_effects) <- c('United States', 'Australia', 'New Zealand')
   
-  country_reporting_effect_predictions <- calculate_age_bounds(predictions) %>%
-    # Distribute country-specific reporting effects
-    mutate(country_reporting_effect = as.numeric(country_effects[as.character(country)])) %>%
+  reporting_effects <- tibble(lineage = c('B/Victoria','B/Yamagata'),
+                              reporting_factor = c(reporting_factor_vic, reporting_factor_yam))
+  
+  predictions_with_reporting_effect <- left_join(calculate_age_bounds(predictions),
+                                                    reporting_effects, by = 'lineage') %>%
     # Add risk modifiers for the relevant ages
-    mutate(risk_modifier = ifelse(max_age <= reporting_age_cutoff, country_reporting_effect, 1)) %>%
+    mutate(risk_modifier = ifelse(max_age <= reporting_age_cutoff, reporting_factor, 1)) %>%
     # Multiply predicted probabilities by age-based risk increase
     mutate(pred_case_prob = pred_case_prob*risk_modifier)  %>%
-    select(-country_reporting_effect)
+    select(-reporting_factor)
   
   # Re-normalize predicted probabilities
-  country_reporting_effect_predictions <- normalize_case_probs(country_reporting_effect_predictions)
-  check_total_probs(country_reporting_effect_predictions)
-  return(country_reporting_effect_predictions)
+  predictions_with_reporting_effect <- normalize_case_probs(predictions_with_reporting_effect)
+  check_total_probs(predictions_with_reporting_effect)
+  return(predictions_with_reporting_effect)
 }
 
 ### ==== Multiply age specific attack rate into multinomial probabilities
@@ -164,8 +163,8 @@ add_age_specific_attack_rates <- function(predictions, beta1, beta2, beta3, scho
 }
 
 # Function for calculating case multinomial probabilities
-compute_case_probs <- function(data_plus_protection, beta1, beta2, beta3,reporting_factor_us, reporting_factor_aus,
-                               reporting_factor_nz, school_start_age, oldest_atk_rate_age, reporting_age_cutoff){
+compute_case_probs <- function(data_plus_protection, beta1, beta2, beta3, reporting_factor_vic, reporting_factor_yam,
+                               school_start_age, oldest_atk_rate_age, reporting_age_cutoff){
   # data_plus_protection: tib. w/ demog. and case data, impr. probs. and protec. pars.; passed by model functions
   predictions <- data_plus_protection %>%
     mutate(pred_case_prob = rel_pop_size*rel_susceptibility)
@@ -174,9 +173,8 @@ compute_case_probs <- function(data_plus_protection, beta1, beta2, beta3,reporti
   predictions <- add_age_specific_attack_rates(predictions, beta1 = beta1, beta2 = beta2, beta3 = beta3,
                                               school_start_age = school_start_age, oldest_atk_rate_age = oldest_atk_rate_age)
   # Add reporting effect
-  predictions <- add_country_reporting_effect(predictions, reporting_factor_us = reporting_factor_us,
-                                              reporting_factor_aus = reporting_factor_aus,
-                                              reporting_factor_nz = reporting_factor_nz,
+  predictions <- add_country_reporting_effect(predictions, reporting_factor_vic = reporting_factor_vic,
+                                              reporting_factor_yam = reporting_factor_yam,
                                               reporting_age_cutoff = reporting_age_cutoff)
   predictions <- normalize_case_probs(predictions)
   check_total_probs(predictions)
@@ -232,9 +230,12 @@ main_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
   beta1 <- parameters[9]
   beta2 <- parameters[10]
   beta3 <- parameters[11]
-  reporting_factor_us <- parameters[12]
-  reporting_factor_aus <- parameters[13]
-  reporting_factor_nz <- parameters[14]
+  reporting_factor <- parameters[12]
+  
+  # In the main model, there's a single reporting factor for both Vic and Yam
+  reporting_factor_vic <- reporting_factor
+  reporting_factor_yam <- reporting_factor
+  
   
   chi_VY = chi_Y * gamma_VY
   chi_YV = chi_V * gamma_YV
@@ -274,9 +275,8 @@ main_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
   
   # Compute case multinomial probabilities
   predictions <- compute_case_probs(data_plus_protection, beta1 = beta1, beta2 = beta2, beta3 = beta3,
-                                    reporting_factor_us = reporting_factor_us, 
-                                    reporting_factor_aus = reporting_factor_aus,
-                                    reporting_factor_nz = reporting_factor_nz,
+                                    reporting_factor_vic = reporting_factor_vic, 
+                                    reporting_factor_yam = reporting_factor_yam,
                                     school_start_age = school_start_age,
                                     oldest_atk_rate_age = oldest_atk_rate_age,
                                     reporting_age_cutoff = reporting_age_cutoff)
@@ -285,7 +285,76 @@ main_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
 }
 
 main_model_par_names <-   c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","gamma_AV","gamma_AY","beta1",
-                            "beta2", "beta3", "reporting_factor_us","reporting_factor_aus","reporting_factor_nz")
+                            "beta2", "beta3","reporting_factor")
+
+two_rhos_model <- function(parameters, dem_plus_case_data, lineage_frequencies,
+                       intensity_scores, cutoff_age, maternal_ab_duration, season_incidence_curves,
+                       school_start_age, oldest_atk_rate_age, reporting_age_cutoff,
+                       precomputed_history_probs){
+  
+  R_V <- parameters[1]
+  R_Y <- parameters[2]
+  chi_V <- parameters[3]
+  chi_Y <- parameters[4]
+  gamma_VY <- parameters[5]
+  gamma_YV <- parameters[6]
+  gamma_AV <- parameters[7]
+  gamma_AY <- parameters[8]
+  beta1 <- parameters[9]
+  beta2 <- parameters[10]
+  beta3 <- parameters[11]
+  reporting_factor_vic <- parameters[12] # Separate rhos for Vic and Yam
+  reporting_factor_yam <- parameters[13]
+  
+  chi_VY = chi_Y * gamma_VY
+  chi_YV = chi_V * gamma_YV
+  chi_AV = chi_V * gamma_AV
+  chi_AY = chi_Y * gamma_AY
+  
+  if(is.null(precomputed_history_probs)){
+    # Calculate exposure history probabilities
+    data_plus_improbs <- calculate_iprobs(dem_plus_case_data = dem_plus_case_data,
+                                          lineage_frequencies = lineage_frequencies,
+                                          intensity_scores = intensity_scores,
+                                          chi_VY = chi_VY, chi_YV = chi_YV,
+                                          chi_AV = chi_AV, chi_AY = chi_AY,
+                                          beta1 = beta1, beta2 = beta2, beta3 = beta3,
+                                          cutoff_age = cutoff_age,
+                                          maternal_ab_duration = maternal_ab_duration,
+                                          season_incidence_curves = season_incidence_curves,
+                                          school_start_age = school_start_age,
+                                          oldest_atk_rate_age = oldest_atk_rate_age,
+                                          birth_year_cutoff = birth_year_cutoff)
+  }else{
+    data_plus_improbs <- left_join(dem_plus_case_data, 
+                                   precomputed_history_probs,
+                                   by = c("country", "observation_year",
+                                          "cohort_type", "cohort_value")) %>%
+      rename(obs_cases = n_cases) %>%
+      select(country, region, observation_year, cohort_type, cohort_value, lineage,
+             obs_cases, CLY_total_cases, rel_pop_size, everything())
+  }
+  
+  # Distribute chi's and R's as columns
+  data_plus_protection <- data_plus_improbs %>%
+    mutate(R_V, R_Y, chi_V, chi_Y, chi_VY, chi_YV, chi_AV, chi_AY)
+  
+  # Calculate relative susceptibilities
+  data_plus_protection <- calculate_relative_susceptibility(data_plus_protection)
+  
+  # Compute case multinomial probabilities
+  predictions <- compute_case_probs(data_plus_protection, beta1 = beta1, beta2 = beta2, beta3 = beta3,
+                                    reporting_factor_vic = reporting_factor_vic, 
+                                    reporting_factor_yam = reporting_factor_yam,
+                                    school_start_age = school_start_age,
+                                    oldest_atk_rate_age = oldest_atk_rate_age,
+                                    reporting_age_cutoff = reporting_age_cutoff)
+  
+  return(predictions)
+}
+
+two_rhos_model_par_names <-   c("R_V","R_Y","chi_V","chi_Y","gamma_VY","gamma_YV","gamma_AV","gamma_AY","beta1",
+                            "beta2", "beta3","reporting_factor_vic", "reporting_factor_yam")
 
 
 # Log-likelihood function by country / observation year / lineage combination (and surveillance type, if applicable)

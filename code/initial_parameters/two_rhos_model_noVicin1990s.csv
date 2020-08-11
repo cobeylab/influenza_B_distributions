@@ -10,4 +10,5 @@ gamma_AV,0.8,1
 beta1,0.001,0.3
 beta2,0.001,0.3
 beta3,0.001,0.3
-reporting_factor,0.5,1.5
+reporting_factor_vic,0.5,1.5
+reporting_factor_yam,0.5,1.5

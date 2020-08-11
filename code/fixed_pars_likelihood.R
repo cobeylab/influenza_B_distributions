@@ -107,45 +107,6 @@ stopifnot(length(selected_par_values) == length(selected_par_names))
 cluster = makeForkCluster(nnodes = n_cores)
 #cluster = makeCluster(nnodes = 9, type = 'FORK')
 
-# If fitting to data from a specific region, constrain unused country-specific parameters to NA
-if(subset_region != 'all'){
-  stopifnot(subset_region %in% c('United States','AUSNZ','USAUS','Australia','New_Zealand'))
-  if(subset_region == 'USAUS'){
-    dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-      mutate(region = ifelse(country %in% c('United States','Australia'),
-                             'USAUS','Other')) %>% ungroup()
-  }
-  if(subset_region == 'Australia'){
-    dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-      mutate(region = ifelse(country =='Australia','Australia','Other')) %>% ungroup()
-  }
-  if(subset_region == 'New_Zealand'){
-    subset_region = 'New Zealand'
-    dem_plus_case_data <- dem_plus_case_data %>% rowwise() %>%
-      mutate(region = ifelse(country =='New Zealand','New Zealand','Other')) %>% ungroup()
-  }
-  # Subset case data
-  dem_plus_case_data <- dem_plus_case_data %>% filter(region == subset_region)
-  
-  # If New Zealand was chosen, set Australia specific parameters to NA, and vice-versa
-  unused_country_pars <- tibble(subset_region = c('United States','Australia','AUSNZ','USAUS', 'New Zealand'),
-                                unused_country_pars = c('reporting_factor_aus,reporting_factor_nz',
-                                                        'reporting_factor_us,reporting_factor_nz',
-                                                        'reporting_factor_us',
-                                                        'reporting_factor_nz',
-                                                        'reporting_factor_aus,reporting_factor_us')) %>%
-    filter(subset_region == !!subset_region) %>% pull(unused_country_pars)
-  unused_country_pars <- str_split(unused_country_pars, ',')[[1]]
-  
-  if(any(selected_par_names %in% unused_country_pars)){
-    stop('Parameter selected for profiling is inconsistent with choice of subset region')
-  }
-  constrained_par_names <- c(constrained_par_names, unused_country_pars)
-  constrained_par_values <- c(constrained_par_values, rep(NA, length(unused_country_pars)))
-}else{
-  unused_country_pars <- NULL
-}
-
 # If start birth year >= 1988, ancestral protection parameters are constrained to 0
 if(start_birth_year >= 1988){
   constrained_par_names <- c(constrained_par_names, 'gamma_AV','gamma_AY')
@@ -211,9 +172,9 @@ write.csv(results,
           row.names = F)
 # Write start and end time
 end_time = now()
-time_file_conn <- file(paste(c(output_directory, paste(selected_par_values, collapse = '_'),
-                               '_fitting_time.csv'),
-                             collapse = ''))
+#time_file_conn <- file(paste(c(output_directory, paste(selected_par_values, collapse = '_'),
+#                               '_fitting_time.csv'),
+#                             collapse = ''))
 
-writeLines(c(paste('Time:', as.duration(start_time %--% end_time))),
-           time_file_conn)
+#writeLines(c(paste('Time:', as.duration(start_time %--% end_time))),
+#           time_file_conn)
