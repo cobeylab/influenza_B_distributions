@@ -60,7 +60,6 @@ get_MLE_parameters <- function(combined_profile, constrained_par_name = NA, cons
   # Parameters that were effectively estimated (i.e., no ancestral imprinting if post 1988, or US if focusing on AUS/NZ)
   inferred_par_names <- model_par_names[model_par_names %in% colnames(combined_profile)]
   
-  
   if(!all(is.na(constrained_par_name))){
     stopifnot(!is.na(constrained_par_value))
     for(i in 1:length(constrained_par_name)){

@@ -48,6 +48,20 @@ combine_profiles <- function(profiles_directory){
   }
   
   combined_profiles <- combined_profiles %>% select(model, loglik, everything())
+
+  # This step renames some parameters for old runs of the single-rho model, which used to be labelled according to country
+  reporting_factor_cols <- colnames(combined_profiles)[grepl('reporting_factor',colnames(combined_profiles))]
+  
+  if(any(c("reporting_factor_aus","reporting_factor_us","reporting_factor_nz") %in% reporting_factor_cols)){
+    # Retain column that's non-NA, corresponding to country the model was fitted to
+    na_columns <- reporting_factor_cols[colSums(is.na(combined_profiles[reporting_factor_cols])) > 0]
+    stopifnot(length(na_columns) == 2)
+    retained_cols <- colnames(combined_profiles)[(colnames(combined_profiles) %in% na_columns) == F]
+    combined_profiles <- combined_profiles[, retained_cols]
+    # Rename reporting factor column as simply 'reporting_factor'
+    names(combined_profiles)[grepl('reporting_factor', names(combined_profiles))] <- 'reporting_factor'
+  }
+  
   write.csv(combined_profiles,
             paste(profiles_directory, 'combined_likelihood_profiles.csv', sep = ''),
             row.names = F)

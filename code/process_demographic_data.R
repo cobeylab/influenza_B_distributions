@@ -70,10 +70,6 @@ normalize_demographic_data(demographic_data %>% filter(cohort_value < 90),1500) 
   geom_line()+
   geom_point()
 
-
-
-
-
 general_population_age <- normalize_demographic_data(demographic_data, 1900) %>%
   filter(country %in% c('Australia','New Zealand')) %>%
   mutate(cohort_value = as.numeric(cohort_value)) %>%
@@ -97,4 +93,30 @@ normalize_demographic_data(demographic_data, 1952) %>%
   ggplot(aes(x = min_birth_year, y = fraction, color = country)) +
   geom_line() +
   facet_grid(observation_year~.)
+
+
+# Calculate vaccine coverage in 2016 using ESR report
+age_group_levels <- c('<1','1-4','5-19','20-34','35-49','50-64','65plus')
+
+nz_demographics_2016_by_age_group <- demographic_data %>% filter(country == 'New Zealand', observation_year == 2016) %>%
+  mutate(cohort_value = as.numeric(cohort_value)) %>%
+  mutate(age_group = 
+           case_when(cohort_value <1 ~ '<1',
+                     (cohort_value >=1 & cohort_value <= 4) ~ '1-4',
+                     (cohort_value >=5 & cohort_value <= 19) ~ '5-19',
+                     (cohort_value >=20 & cohort_value <= 34) ~ '20-34',
+                     (cohort_value >=35 & cohort_value <= 49) ~ '35-49',
+                     (cohort_value >=50 & cohort_value <= 64) ~ '50-64',
+                     (cohort_value >= 65) ~ '65plus')
+         ) %>%
+  mutate(age_group = factor(age_group, levels = age_group_levels)) %>%
+  group_by(age_group) %>%
+  summarise(n_persons = sum(n_persons)) %>%
+  ungroup() 
+
+vaccine_coverage_nz_2016 <- as_tibble(read.csv('../data/vaccine_coverage_nz_2016.csv'))
+
+left_join(nz_demographics_2016_by_age_group, vaccine_coverage_nz_2016, by = 'age_group') %>%
+  mutate(age_group = factor(age_group, levels = age_group_levels)) %>%
+  mutate(coverage = n_vaccines_distributed/n_persons * 100) %>% arrange(age_group)
   

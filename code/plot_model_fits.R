@@ -86,7 +86,8 @@ main <- function(){
   model_par_names <- get(paste(model, '_model_par_names', sep = ''))  
   
   mle_pars <- get_MLE_parameters(combined_profile)
-  # Replace numbers for NAs for irrelevant parameters  (e.g. reporting factor in NZ when looking at Aus only)
+  
+  # Replace numbers for NAs for irrelevant parameters  (from older versions of model)
   # Won't affect model fit.
   mle_pars[is.na(mle_pars)] <- 0
   write.csv(tibble(par = model_par_names, value = mle_pars),
@@ -106,9 +107,15 @@ main <- function(){
     beta1 <- mle_pars[9]
     beta2 <-  mle_pars[10]
     beta3 <-  mle_pars[11]
-    reporting_factor_us <-  mle_pars[12]
-    reporting_factor_aus <-  mle_pars[13]
-    reporting_factor_nz <-  mle_pars[14]
+    
+    if(model == 'main'){
+      reporting_factor_vic = mle_pars[model_par_names == 'reporting_factor']
+      reporting_factor_yam = mle_pars[model_par_names == 'reporting_factor']
+    }else{
+      stopifnot(model == 'two_rhos')
+      reporting_factor_vic = mle_pars[model_par_names == 'reporting_factor_vic']
+      reporting_factor_yam = mle_pars[model_par_names == 'reporting_factor_yam']
+    }
     
     chi_VY = chi_Y * gamma_VY
     chi_YV = chi_V * gamma_YV

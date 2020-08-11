@@ -1,0 +1,8 @@
+age_group,n_vaccines_distributed,source
+<1,312,https://surv.esr.cri.nz/PDF_surveillance/Virology/FluAnnRpt/InfluenzaAnn2016.pdf
+1-4,5782,
+5-19,22847,
+20-34,30996,
+35-49,49155,
+50-64,115242,
+65plus,448894,
