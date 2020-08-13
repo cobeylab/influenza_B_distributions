@@ -186,20 +186,20 @@ base_plot_function <- function(data, plot_predictions, plot_excess_cases = F, co
   if(plot_excess_cases){
     stopifnot(plot_predictions == F)
     if(length(data) == 1){
-      pl <- data[[1]] %>% ggplot(aes(x = cohort_value, y = observed_value - predicted_value)) +
+      pl <- data[[1]] %>% ggplot(aes(x = cohort_value, y = predicted_value - observed_value)) +
         geom_col() +
-        geom_linerange(aes(ymin = predicted_value_lower - predicted_value,
-                           ymax = predicted_value_upper - predicted_value), size = 1, col = 'red',
+        geom_linerange(aes(ymin = predicted_value_lower - observed_value,
+                           ymax = predicted_value_upper - observed_value), size = 1, col = 'red',
                        alpha = 0.4)
     }else{
       stopifnot(length(data) ==2)
-      pl <-  data[[1]] %>% ggplot(aes(x = cohort_value, y = observed_value - predicted_value)) +
-        geom_point(colour = 'red', shape = 21) +
+      pl <-  data[[1]] %>% ggplot(aes(x = cohort_value, y = predicted_value - observed_value)) +
+        geom_point(colour = 'red', shape = 21, size = 0.8) +
         geom_line(color = 'red') +
-        geom_linerange(aes(ymin = predicted_value_lower - predicted_value,
-                           ymax = predicted_value_upper - predicted_value), size = 1, col = 'red',
+        geom_linerange(aes(ymin = predicted_value_lower - observed_value,
+                           ymax = predicted_value_upper - observed_value), size = 0.5, col = 'red',
                        alpha = 0.4) +
-        geom_point(data = data[[2]], color = 'blue', size = 1)
+        geom_point(data = data[[2]], color = 'blue', size = 0.5, alpha = 0.8)
     }
     
   }else{
@@ -284,13 +284,13 @@ plot_by_obs_year <- function(predictions, n_CI_replicates, CI_alpha, plot_predic
   
   if(plot_fraction){
     if(plot_excess_cases){
-      ylabel <- 'Excess fraction of cases'
+      ylabel <- 'Predicted minus observed cases'
     }else{
       ylabel <- 'Fraction of cases'
     }
   }else{
     if(plot_excess_cases){
-      ylabel <- 'Excess number of cases'
+      ylabel <- 'Predicted minus observed cases'
     }else{
       ylabel <- 'Number of cases'
     }

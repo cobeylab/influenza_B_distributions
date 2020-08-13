@@ -3,6 +3,7 @@ library(reshape2)
 library(tidyr)
 library(dplyr)
 library(cowplot)
+library(ggplot2)
 library(assertthat)
 library(stringr)
 
@@ -41,6 +42,8 @@ if(all(is.na(constrained_pars)) & !all(is.na(constrained_par_values)) |
    (!all(is.na(constrained_pars)) & all(is.na(constrained_par_values)))){
   stop('Parameter constraints incorrectly specified.')
 }
+
+n_pars_constrained <- length(constrained_pars)
 
 source(input_file)
 if(precomputed_history_probs_path == 'NA'){precomputed_history_probs_path <- NA}
@@ -87,9 +90,8 @@ main <- function(){
   
   mle_pars <- get_MLE_parameters(combined_profile)
   
-  # Replace numbers for NAs for irrelevant parameters  (from older versions of model)
-  # Won't affect model fit.
-  mle_pars[is.na(mle_pars)] <- 0
+  stopifnot(sum(is.na(mle_pars)) == 0)
+  
   write.csv(tibble(par = model_par_names, value = mle_pars),
             paste0(plot_directory,'pars.csv'), row.names = F)
   
@@ -205,7 +207,8 @@ main <- function(){
                                     loglik_by_obs_year_constrained %>% rename(loglik_constrained = loglik),
                                     by = c('country', 'lineage', 'observation_year')) %>%
       mutate(LRS = 2*(loglik_global_MLE - loglik_constrained)) %>%
-      mutate(p = 1 - pchisq(LRS, length(constrained_pars)))
+      mutate(p = 1 - pchisq(LRS, n_pars_constrained)) %>%
+      mutate(global_LRS_without_this_line = sum(LRS) - LRS)
     
     write.csv(loglik_by_obs_year,
               paste0(plot_directory,'loglik_by_obs_year.csv'), row.names = F)
