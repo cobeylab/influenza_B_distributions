@@ -6,6 +6,25 @@ library(stringr)
 args <- commandArgs(trailingOnly = TRUE)
 main_directory <- args[1] # results_directory <- '../results/fitting_replicates/simulated_data/2018-06-11/'
 
+update_reporting_factor_cols <- function(profile_tibble){
+  # Renames reporting parameters for old runs of the single-rho (main) model, which used to be labelled according to country
+  reporting_factor_cols <- colnames(profile_tibble)[grepl('reporting_factor',colnames(profile_tibble))]
+  
+  if(any(c("reporting_factor_aus","reporting_factor_us","reporting_factor_nz") %in% reporting_factor_cols)){
+    # Retain column that's non-NA, corresponding to country the model was fitted to
+    na_columns <- reporting_factor_cols[colSums(is.na(profile_tibble[reporting_factor_cols])) > 0]
+    stopifnot(length(na_columns) == 2)
+    retained_cols <- colnames(profile_tibble)[(colnames(profile_tibble) %in% na_columns) == F]
+    profile_tibble <- profile_tibble[, retained_cols]
+    # Rename reporting factor column as simply 'reporting_factor'
+    names(profile_tibble)[grepl('reporting_factor', names(profile_tibble))] <- 'reporting_factor'
+  }
+  return(profile_tibble)
+  
+}
+
+
+
 # Funciton for reading and combining results files within a single directory
 combine_files <- function(results_directory){
   files <- list.files(results_directory)
@@ -17,7 +36,8 @@ combine_files <- function(results_directory){
       file_paths <- paste(results_directory,model_selection_files, sep = '')
       
       result_tibbles_list <- lapply(file_paths, FUN = read.csv, header = T)
-      
+      result_tibbles_list <- lapply(result_tibbles_list, FUN = update_reporting_factor_cols)
+    
       combined_tibble <- result_tibbles_list[[1]]
       if(length(result_tibbles_list) > 1){
         for(i in 2:length(result_tibbles_list)){
@@ -49,18 +69,6 @@ combine_profiles <- function(profiles_directory){
   
   combined_profiles <- combined_profiles %>% select(model, loglik, everything())
 
-  # This step renames some parameters for old runs of the single-rho model, which used to be labelled according to country
-  reporting_factor_cols <- colnames(combined_profiles)[grepl('reporting_factor',colnames(combined_profiles))]
-  
-  if(any(c("reporting_factor_aus","reporting_factor_us","reporting_factor_nz") %in% reporting_factor_cols)){
-    # Retain column that's non-NA, corresponding to country the model was fitted to
-    na_columns <- reporting_factor_cols[colSums(is.na(combined_profiles[reporting_factor_cols])) > 0]
-    stopifnot(length(na_columns) == 2)
-    retained_cols <- colnames(combined_profiles)[(colnames(combined_profiles) %in% na_columns) == F]
-    combined_profiles <- combined_profiles[, retained_cols]
-    # Rename reporting factor column as simply 'reporting_factor'
-    names(combined_profiles)[grepl('reporting_factor', names(combined_profiles))] <- 'reporting_factor'
-  }
   
   write.csv(combined_profiles,
             paste(profiles_directory, 'combined_likelihood_profiles.csv', sep = ''),

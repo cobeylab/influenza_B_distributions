@@ -330,7 +330,8 @@ plot_by_obs_year <- function(predictions, n_CI_replicates, CI_alpha, plot_predic
       xlab('Year of birth') +
       ylab(ylabel) +
       background_grid(major = "xy", minor = "none") +
-      theme(axis.text.x = element_text(size = 12))
+      theme(axis.text.x = element_text(size = 8),
+            axis.text.y = element_text(size = 10))
   }
   names(plot_list) <- countries_in_data
   return(plot_list)
