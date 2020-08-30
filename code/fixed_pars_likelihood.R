@@ -20,11 +20,6 @@ source('merge_data.R')
 # Load basic parameters (maternal ab duration, school start age)
 source('basic_parameters.R')
 
-# If no-ancestor model selected, change birth year cutoff to 1987 (for calculation of inf. history probs.)
-if(selected_model_name == 'no_ancestor'){
-  birth_year_cutoff <- 1987
-}
-
 # Read processed data files
 case_data <- as_tibble(read.csv(case_data_path))
 case_data <- set_min_birth_year(case_data, start_birth_year)

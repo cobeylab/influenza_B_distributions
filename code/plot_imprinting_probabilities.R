@@ -75,7 +75,7 @@ chi_AY <- chi_Y * gamma_AY
 
 
 # Tibble with combinations of country/birth year for the specified observation year
-years_tibble <- as_tibble(expand.grid(c('Australia','New Zealand'),
+years_tibble <- as_tibble(expand.grid(c('New Zealand'),
                                       observation_year, max(birth_year_range[1], birth_year_cutoff):birth_year_range[2])) %>%
   rename(country = Var1, observation_year = Var2, birth_year = Var3)
 
@@ -135,7 +135,12 @@ iprobs_by_byear <- left_join(iprobs_by_byear,
 
 
 # Plot probabilities of infection histories
-history_order = c('P_A0','P_AY0','P_AV0','P_AVY','P_Y0','P_YV','P_VY','P_V0','P_0')
+if(min(iprobs_by_byear$birth_year) < 1988){
+  history_order = c('P_A0','P_AY0','P_AV0','P_AVY','P_Y0','P_YV','P_VY','P_V0','P_0')  
+}else{
+  history_order = c('P_Y0','P_YV','P_VY','P_V0','P_0')  
+}
+
 history_labels = c()
 for(h in history_order){
   subscript = strsplit(h, '_')[[1]][2]
@@ -157,6 +162,7 @@ inf_history_probs_pl <- iprobs_by_byear %>%
   select(country, observation_year, birth_year, matches('P_', ignore.case = F)) %>%
    melt(id = c('observation_year','birth_year','country'),
         variable.name = 'history', value.name = 'probability') %>%
+   filter(history %in% history_order) %>%
    mutate(history = factor(history, levels = history_order))
 
 if(min(birth_year_range) >= 1988){

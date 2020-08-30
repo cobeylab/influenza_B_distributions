@@ -164,8 +164,9 @@ plot_likprof <- function(profile_csv_path, true_parameter_values_path, convert_g
   
   # Interpolate
   # Use LOESS if bivariate profile, linear interpolation if univariate
-  interpolate_profile_function <- ifelse(length(parameters) == 1, interpolate_profile_linear,
-                                interpolate_profile_loess)
+  #interpolate_profile_function <- ifelse(length(parameters) == 1, interpolate_profile_linear,
+  #                              interpolate_profile_loess)
+  interpolate_profile_function <- interpolate_profile_linear
   interp_profile = interpolate_profile_function(lik_profile, parameters, step_size = 0.001)
   
   # Plots
@@ -280,24 +281,7 @@ main <- function(main_directory, is_synthetic){
                    'likelihood_profiles/main_panel.pdf'),
             main_panel,
             base_width = 12, base_height = 13)
-  
-  
-  # Panel with protection only from pre 1988 exposure
-  pre1988_protection_list = list(profile_plots$gamma_AV +
-                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[VV])~"),"~italic(gamma[AV]))),
-                                 profile_plots$gamma_AY +
-                                   xlab(expression("Protection against B/Yam from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
-                                   ylab('')
-  )
-  
-  pre1988_protection <- plot_grid(plotlist = pre1988_protection_list,
-                                  nrow = 1)
-  
-  save_plot(paste0(main_directory,'likelihood_profiles/pre1988_protection.pdf'),
-            pre1988_protection,
-            base_height = 5, base_width = 13)
-  
-  
+
   rates_factors_plot <- plot_grid(profile_plots$beta1 + 
                                     xlab('Attack rate for 0-5-year-olds') +
                                     ylab('Log-likelihood'),
@@ -316,19 +300,62 @@ main <- function(main_directory, is_synthetic){
                    'likelihood_profiles/attack_rates_and_reporting_factors.pdf'),
             rates_factors_plot ,
             base_width = 12, base_height = 8)
+  
+  # Panel with protection only from pre 1988 exposure
+  pre1988_protection_list = list(profile_plots$gamma_AV +
+                                   xlab(expression("Protection against B/Vic from pre-1988 exposure (relative to"~italic(chi[VV])~"),"~italic(gamma[AV]))),
+                                 profile_plots$gamma_AY +
+                                   xlab(expression("Protection against B/Yam from pre-1988 exposure (relative to"~italic(chi[YY])~"),"~italic(gamma[AY]))) +
+                                   ylab('')
+  )
+  
+  pre1988_protection <- plot_grid(plotlist = pre1988_protection_list,
+                                  nrow = 1)
+  
+  save_plot(paste0(main_directory,'likelihood_profiles/pre1988_protection.pdf'),
+            pre1988_protection,
+            base_height = 5, base_width = 13)
 
   
-  # chi_Y_vs_R_Y <-  profile_plots$R_Y_VS_chi_Y +
-  #   ylim(0.1,1) +
-  #        ylab(expression("      Homologous protection\nfrom prior B/Yam exposure, "~italic(chi[YY]))) +
-  #        xlab(expression("Imprinting protection against B/Yam, "~ italic(R[Y]))) +
-  #        theme(legend.position = c(0.03,0.095),
-  #              legend.background = element_rect(fill='white', linetype = 1))
-  # 
-  # save_plot(paste0(main_directory,'likelihood_profiles/R_Y_VS_chi_Y_broad.pdf'),
-  #           chi_Y_vs_R_Y + guides(shape = F),
-  #           base_height = 5, base_width = 6)
-  # 
+  if('R_Y_VS_chi_Y' %in% names(profile_plots)){
+    chi_Y_vs_R_Y <-  profile_plots$R_Y_VS_chi_Y +
+      ylab(expression("      Homologous protection\nfrom prior B/Yam exposure, "~italic(chi[YY]))) +
+      xlab(expression("Imprinting protection against B/Yam, "~ italic(R[Y]))) +
+      theme(legend.position = c(0.03,0.95),
+            legend.background = element_rect(fill='white', linetype = 1))
+    
+    save_plot(paste0(main_directory,'likelihood_profiles/R_Y_VS_chi_Y.pdf'),
+              chi_Y_vs_R_Y + guides(shape = F),
+              base_height = 5, base_width = 6)
+  }
+  
+  if('gamma_YV_vs_beta1' %in% names(profile_plots)){
+    rates_vs_gamma_YV <- plot_grid(profile_plots$gamma_YV_vs_beta1 +
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab('') + ylab('Attack rate for preschoolers (0-5 years old)'),
+                                   profile_plots$gamma_YV_vs_beta2 + 
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab(expression("Protection against B/Vic from B/Yam (relative to"~italic(chi[VV])~"),"~italic(gamma[YV]))) +
+                                     ylab('Attack rate 6-17 years old'),
+                                   profile_plots$gamma_YV_vs_beta3 +
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab('') + ylab('Attack rate for 18+ years old'),
+                                   nrow = 1)
+    
+  save_plot(paste0(main_directory,'likelihood_profiles/attack_rates_vs_yam_to_vic_protection.pdf'),
+            rates_vs_gamma_YV,
+            base_height = 5, base_width = 18)
+  }
+    
+    
+    save_plot(paste0(main_directory,'likelihood_profiles/gamma_YV_vs_beta1.pdf'),
+              profile_plots$gamma_YV_vs_beta1, base_height = 5, base_width = 6)
+  }
+
+
   # chi_Y_vs_R_Y_narrow <-  profile_plots$R_Y_VS_chi_Y_narrow +
   #   ylab(expression("      Homologous protection\nfrom prior B/Yam exposure, "~italic(chi[YY]))) +
   #   xlab(expression("Imprinting protection against B/Yam, "~ italic(R[Y]))) +
