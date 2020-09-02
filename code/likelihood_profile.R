@@ -17,6 +17,21 @@ precomputed_history_probs_path = args[9] # set to NA for all analyses in the pap
 
 selected_model_name = args[10] # set to 'main' for all analyses in the paper.
 selected_par_names = args[11] # Comma-separated list of selected parameter names, e.g. "R_Y,gamma_AY" or selected_par_names"R_Y"
+
+# Parameter names
+# R_V
+# R_Y
+# chi_V
+# chi_Y
+# gamma_VY
+# gamma_YV
+# gamma_AY
+# gamma_AV
+# beta1
+# beta2
+# beta3
+# reporting_factor
+
 lower_limits = args[12] # Comma-separated list of lower bounds for parameter values 
 upper_limits = args[13] # Comma-separated list of upper bounds for parameter values 
 increments = args[14] # Comma-separated values for the increment between par1 and par2 values
