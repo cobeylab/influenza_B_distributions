@@ -1,4 +1,4 @@
-# Constructs bi-variate likelihood profile for the specified model and parameters
+# Constructs likelihood profiles for the specified model and parameters
 # Based on Ed Baskerville's code for runmany
 library(stringr)
 
@@ -11,21 +11,21 @@ intensity_scores_path = args[3] # intensity_scores_path = '../results/processed_
 lineage_frequencies_path = args[4] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
 season_incidence_curves_path = args[5] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'
 start_birth_year = as.numeric(args[6]) # Earliest birth year in case data to analyze
-subset_region = args[7]
+subset_region = args[7] # New_Zealand or Australia
 reporting_age_cutoff = as.numeric(args[8]) # Differential reporting if age <= reporting_age_cutoff
-precomputed_history_probs_path = args[9] # precomputed_history_probs_path = '../results/model_fits/post1952_nz_data_all_surveillance_untyped_assigned_noVicin1990s/main_model/MLE_history_probs.csv'
+precomputed_history_probs_path = args[9] # set to NA for all analyses in the paper.
 
-selected_model_name = args[10] # Model name (see model_functions.R)
-selected_par_names = args[11] # Comma-separated list of selected parameter names selected_par_names <- "Vic_against_Vic_protection,Yam_against_Vic_protection"
+selected_model_name = args[10] # set to 'main' for all analyses in the paper.
+selected_par_names = args[11] # Comma-separated list of selected parameter names, e.g. "R_Y,gamma_AY" or selected_par_names"R_Y"
 lower_limits = args[12] # Comma-separated list of lower bounds for parameter values 
 upper_limits = args[13] # Comma-separated list of upper bounds for parameter values 
 increments = args[14] # Comma-separated values for the increment between par1 and par2 values
-output_directory <- args[15]
-n_cores <- as.integer(args[16])
-initial_par_bounds_path = as.character(args[17])
-bounded_par_names <- as.character(args[18]) # Comma-separated list of pars with non-default bounds
-bounded_par_lbounds <- as.character(args[19]) # Comma-separated list of lower non-default bounds 
-bounded_par_ubounds <- as.character(args[20]) # Comma-separated list of upper non-default bounds
+output_directory <- args[15] # Output for the likelihood profile over the chosen parameter(s)
+n_cores <- as.integer(args[16]) # Number of cores to use. 
+initial_par_bounds_path = as.character(args[17]) # csv with intervals to sample initial values. Default in the paper: code/intial_parameters/three_class_atk_rate_model_noVicin1990s.csv
+bounded_par_names <- as.character(args[18]) # Comma-separated list of pars with non-default bounds. Can be left as NA
+bounded_par_lbounds <- as.character(args[19]) # Comma-separated list of lower non-default bounds. Can be left as NA
+bounded_par_ubounds <- as.character(args[20]) # Comma-separated list of upper non-default bounds. Can be left as NA
 
 if(!is.na(precomputed_history_probs_path) & is.na(bounded_par_names)){
   stop('Must constrain betas if using pre-computed infection history probabilities')
