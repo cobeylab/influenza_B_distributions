@@ -30,6 +30,19 @@ args = commandArgs(trailingOnly = T)
 
 input_file = args[1] # Input file specifying case data, covariate data, etc.
 # (should be in the same directory as likelihood profiles)
+
+# Example of input file:
+#case_data_path='../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv'
+#demographic_data_path='../results/processed_data/demographic_data.csv'
+#intensity_scores_path='../results/processed_data/intensity_scores.csv'
+#lineage_frequencies_path='../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
+#season_incidence_curves_path='../results/processed_data/season_incidence_curves.csv'
+#start_birth_year=1959
+#subset_region='New_Zealand'
+#reporting_age_cutoff=1
+#precomputed_history_probs_path='NA'
+#initial_pars='initial_parameters/three_class_atk_rate_model_noVicin1990s.csv'
+
 constrained_pars = args[2] # Comma-separated string of parameters to constrain, if any
 constrained_par_values = args[3] # Comma-separated values of constrained parameters, if any
 constraint_type = args[4] # Soft: look for best values of remaining parameters
