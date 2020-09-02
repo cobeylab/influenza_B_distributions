@@ -278,7 +278,8 @@ normalize_predictions <- function(predictions,plot_fraction, demographic_normali
 
 # Function for making plots for a specified country
 plot_by_obs_year <- function(predictions, n_CI_replicates, CI_alpha, plot_predictions = T,
-                             plot_excess_cases = F, plot_fraction = F, demographic_normalization = F){
+                             plot_excess_cases = F, plot_fraction = F, demographic_normalization = F,
+                             plot_cohort_type = 'birth_year'){
   
   grouping_variables <- c('observation_year','country')
   
@@ -307,8 +308,8 @@ plot_by_obs_year <- function(predictions, n_CI_replicates, CI_alpha, plot_predic
   }
   
   for(i in 1:length(predictions)){
-    # Adjust predictions so all cohorts plotted by birth year
-    predictions[[i]] <- set_data_to_cohort_type(predictions[[i]], plot_cohort_type = 'birth_year')
+    # Adjust predictions so all cohorts plotted by birth year (or by age)
+    predictions[[i]] <- set_data_to_cohort_type(predictions[[i]], plot_cohort_type = plot_cohort_type)
     
     # Add bootstrap CIs.
     predictions[[i]] <- add_boostrap_CI( predictions[[i]], n_CI_replicates, CI_alpha, grouping_variables,

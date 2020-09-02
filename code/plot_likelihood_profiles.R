@@ -267,9 +267,9 @@ main <- function(main_directory, is_synthetic){
     profile_plots$chi_Y + 
       xlab(expression("Homologous protection from prior B/Yam exposure, "~italic(chi[YY]))),
     profile_plots$gamma_YV + 
-      xlab(expression("Protection against B/Vic from B/Yam (relative to"~italic(chi[VV])~"),"~italic(gamma[YV]))),
+      xlab(expression("Protection against B/Vic from B/Yam (relative to"~italic(chi[VV])~"),"~italic(gamma[VY]))),
     profile_plots$gamma_VY + 
-      xlab(expression("Protection against B/Yam from B/Vic (relative to"~italic(chi[YY])~"),"~italic(gamma[VY]))),
+      xlab(expression("Protection against B/Yam from B/Vic (relative to"~italic(chi[YY])~"),"~italic(gamma[YV]))),
     profile_plots$R_V + 
       xlab(expression("Imprinting protection against B/Vic, "~ italic(R[V]))),
     profile_plots$R_Y + 
@@ -281,6 +281,28 @@ main <- function(main_directory, is_synthetic){
                    'likelihood_profiles/main_panel.pdf'),
             main_panel,
             base_width = 12, base_height = 13)
+  
+  if('gamma_YV_vs_beta1' %in% names(profile_plots)){
+    rates_vs_gamma_YV <- plot_grid(profile_plots$gamma_YV_vs_beta1 +
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab('') + ylab(expression("Baseline attack rate for 0-5 year-olds,"~italic(beta[1]))),
+                                   profile_plots$gamma_YV_vs_beta2 + 
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab(expression("Protection against B/Vic from B/Yam (relative to"~italic(chi[VV])~"),"~italic(gamma[VY]))) +
+                                     ylab('Attack rate 6-17 years old'),
+                                   profile_plots$gamma_YV_vs_beta3 +
+                                     theme(legend.position = c(0.03,0.95),
+                                           legend.background = element_rect(fill='white', linetype = 1)) +
+                                     xlab('') + ylab('Attack rate for 18+ years old'),
+                                   nrow = 1)
+    
+    save_plot(paste0(main_directory,'likelihood_profiles/attack_rates_vs_yam_to_vic_protection.pdf'),
+              rates_vs_gamma_YV,
+              base_height = 5, base_width = 18)
+  }
+  
 
   rates_factors_plot <- plot_grid(profile_plots$beta1 + 
                                     xlab('Attack rate for 0-5-year-olds') +
@@ -317,43 +339,18 @@ main <- function(main_directory, is_synthetic){
             base_height = 5, base_width = 13)
 
   
-  if('R_Y_VS_chi_Y' %in% names(profile_plots)){
-    chi_Y_vs_R_Y <-  profile_plots$R_Y_VS_chi_Y +
-      ylab(expression("      Homologous protection\nfrom prior B/Yam exposure, "~italic(chi[YY]))) +
-      xlab(expression("Imprinting protection against B/Yam, "~ italic(R[Y]))) +
-      theme(legend.position = c(0.03,0.95),
-            legend.background = element_rect(fill='white', linetype = 1))
-    
-    save_plot(paste0(main_directory,'likelihood_profiles/R_Y_VS_chi_Y.pdf'),
-              chi_Y_vs_R_Y + guides(shape = F),
-              base_height = 5, base_width = 6)
-  }
+  #if('R_Y_VS_chi_Y' %in% names(profile_plots)){
+  #  chi_Y_vs_R_Y <-  profile_plots$R_Y_VS_chi_Y +
+  #    ylab(expression("      Homologous protection\nfrom prior B/Yam exposure, "~italic(chi[YY]))) +
+  #    xlab(expression("Imprinting protection against B/Yam, "~ italic(R[Y]))) +
+  #    theme(legend.position = c(0.03,0.95),
+  #          legend.background = element_rect(fill='white', linetype = 1))
+  #  
+  #  save_plot(paste0(main_directory,'likelihood_profiles/R_Y_VS_chi_Y.pdf'),
+  #            chi_Y_vs_R_Y + guides(shape = F),
+  #            base_height = 5, base_width = 6)
+  #}
   
-  if('gamma_YV_vs_beta1' %in% names(profile_plots)){
-    rates_vs_gamma_YV <- plot_grid(profile_plots$gamma_YV_vs_beta1 +
-                                     theme(legend.position = c(0.03,0.95),
-                                           legend.background = element_rect(fill='white', linetype = 1)) +
-                                     xlab('') + ylab('Attack rate for preschoolers (0-5 years old)'),
-                                   profile_plots$gamma_YV_vs_beta2 + 
-                                     theme(legend.position = c(0.03,0.95),
-                                           legend.background = element_rect(fill='white', linetype = 1)) +
-                                     xlab(expression("Protection against B/Vic from B/Yam (relative to"~italic(chi[VV])~"),"~italic(gamma[YV]))) +
-                                     ylab('Attack rate 6-17 years old'),
-                                   profile_plots$gamma_YV_vs_beta3 +
-                                     theme(legend.position = c(0.03,0.95),
-                                           legend.background = element_rect(fill='white', linetype = 1)) +
-                                     xlab('') + ylab('Attack rate for 18+ years old'),
-                                   nrow = 1)
-    
-  save_plot(paste0(main_directory,'likelihood_profiles/attack_rates_vs_yam_to_vic_protection.pdf'),
-            rates_vs_gamma_YV,
-            base_height = 5, base_width = 18)
-  }
-    
-    
-    save_plot(paste0(main_directory,'likelihood_profiles/gamma_YV_vs_beta1.pdf'),
-              profile_plots$gamma_YV_vs_beta1, base_height = 5, base_width = 6)
-  }
 
 
   # chi_Y_vs_R_Y_narrow <-  profile_plots$R_Y_VS_chi_Y_narrow +
