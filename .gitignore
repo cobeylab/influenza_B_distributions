@@ -25,4 +25,5 @@ data/ESR_data_2017-19.xlsx
 data/case_data/nz_data_2001-2012_batch.csv
 data/case_data/nz_data_2012-2019_batch.csv
 data/seroprevalence_data/
+data/NZ-Aus_2000s_HA_NA_seqs/
 results/sequence_divergence/
