@@ -7,17 +7,17 @@ library(lubridate)
 
 output_directory <- '../results/processed_data/'
 
-assign_region <- function(combined_seq_data){
+assign_region <- function(combined_isolate_data){
   regions <- tibble(country = c('United States','Australia','New Zealand'),
          region = c('United States', 'AUSNZ','AUSNZ'))
-  return(left_join(combined_seq_data,regions, by = 'country'))
+  return(left_join(combined_isolate_data,regions, by = 'country'))
 }
 
 
 main <- function(){
   genbank_B_data <- read.csv('../data/genbank_data/genbank_data.csv', header = T)
   gisaid_B_data <- read.csv('../data/gisaid_metadata/gisaid_metadata.csv')
-
+  
   # Filter Genbank and Gisaid data to retain only isolates with known collection year and year >= 1970
   # Lower bound for split between Yam and Vic lineages
   genbank_B_data <- genbank_B_data %>% filter(is.na(year) == F, year >= 1970)
@@ -30,7 +30,7 @@ main <- function(){
     # Find how many different lineages were assigned for each combination
     mutate(n_occurrences = n(), 
            n_lineage_assignments = length(unique(lineage)[is.na(unique(lineage)) == F])) %>%
-    # Consolidade multiple occurrences
+    # Consolidate multiple occurrences
     # And discard isolate/year/country combinations with inconsistent lineage assignments
     filter(n_occurrences == 1, n_lineage_assignments < 2 ) %>%
     select(isolate_name, country, lineage, year) %>% ungroup()
@@ -42,7 +42,7 @@ main <- function(){
     # Consolidade multiple occurrences
     # And discard isolate/year/country combinations with inconsistent lineage assignments
     filter(n_occurrences == 1, n_lineage_assignments < 2 ) %>%
-    select(isolate_name, country, lineage, year) %>% ungroup()
+    select(isolate_name, continent, country, lineage, year) %>% ungroup()
   
   # ----- Compare blast assignments with assignments from Genbank
   # Create tibble by merging...
@@ -62,29 +62,35 @@ main <- function(){
   # -----
   
   # Merge tibbles by isolate name, country and year
-  combined_seq_data <- full_join(genbank_B_data %>% select(isolate_name, country, lineage, year),
-            gisaid_B_data %>% select(isolate_name, country, lineage, year),
-            by = c('isolate_name', 'country', 'year')) %>%
-              # Remove isolates where lineage is not available in either dataset
-              filter(is.na(lineage.x) == F | is.na(lineage.y) == F) %>%
-              # Remove isolates where year and country information is missing
-              filter(is.na(year) == F,is.na(country) == F)
+  combined_isolate_data <- full_join(genbank_B_data %>% select(isolate_name, country, lineage, year),
+                                     gisaid_B_data %>% select(isolate_name, country, lineage, year),
+                                     by = c('isolate_name', 'country', 'year')) %>%
+    # Remove isolates where lineage is not available in either dataset
+    filter(is.na(lineage.x) == F | is.na(lineage.y) == F) %>%
+    # Remove isolates where year and country information is missing
+    filter(is.na(year) == F,is.na(country) == F)
   
-  combined_seq_data <- combined_seq_data %>% 
+  combined_isolate_data <- combined_isolate_data %>% 
     mutate(lineage.x = as.character(lineage.x),
            lineage.y = as.character(lineage.y)) %>%
     # Retain isolates where one OR the other database provides a lineage assignment, OR, if both do, retain only isolates for which they agree.
     filter((is.na(lineage.x) == T | is.na(lineage.y) == T) | (is.na(lineage.x) == F & is.na(lineage.y) == F & lineage.x == lineage.y)
-          ) %>%
+    ) %>%
     # For isolates for which only one database provides lineage assignment, use that lineage assignment
     mutate(lineage = ifelse(is.na(lineage.x), lineage.y, lineage.x)) %>%
     select(isolate_name, country, lineage, year)
   
+  # Add variable 'continent'
+  combined_isolate_data <- left_join(combined_isolate_data,
+                                     gisaid_B_data %>% select(country, continent) %>% 
+                                       filter(!is.na(country), continent != '') %>% unique(),
+                                     by = 'country')
+  
   # Add variable 'region' ('United States','AUSNZ')
-  combined_seq_data <- assign_region(combined_seq_data)
-
+  combined_isolate_data <- assign_region(combined_isolate_data)
+  
   # Calculate relative lineage frequencies in each year (season) pooled across all countries 
-  lineage_frequency_data_global <- combined_seq_data %>% 
+  lineage_frequency_data_global <- combined_isolate_data %>% 
     group_by(year) %>% 
     summarise(n_yamagata_global = sum(lineage == 'Yamagata'),
               n_victoria_global = sum(lineage == 'Victoria')) %>%
@@ -93,7 +99,7 @@ main <- function(){
            fraction_victoria_global = 1 - fraction_yamagata_global) %>% ungroup() 
   
   # Aggregate frequencies excluding Australia and New Zealand
-  lineage_frequency_data_global_minus_AUSNZ <- combined_seq_data %>% 
+  lineage_frequency_data_global_minus_AUSNZ <- combined_isolate_data %>% 
     filter(country != 'Australia', country != 'New Zealand') %>%
     group_by(year) %>% 
     summarise(n_yamagata_global = sum(lineage == 'Yamagata'),
@@ -103,7 +109,7 @@ main <- function(){
            fraction_victoria_global = 1 - fraction_yamagata_global) %>% ungroup() 
   
   # Calculate relative lineage frequencies in each year (season) in the United States
-  lineage_frequency_data_US <- combined_seq_data %>% 
+  lineage_frequency_data_US <- combined_isolate_data %>% 
     filter(country == "United States") %>%
     group_by(year, region) %>% 
     summarise(n_yamagata = sum(lineage == 'Yamagata'),
@@ -113,7 +119,7 @@ main <- function(){
            fraction_victoria = 1 - fraction_yamagata) %>% ungroup()
   
   # Calculate relative lineage frequencies in Australia/NZ
-  lineage_frequency_data_AUSNZ <- combined_seq_data %>% 
+  lineage_frequency_data_AUSNZ <- combined_isolate_data %>% 
     filter(region == 'AUSNZ') %>%
     group_by(year, region) %>% 
     summarise(n_yamagata = sum(lineage == 'Yamagata'),
