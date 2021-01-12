@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = T)
 args[args == 'NA'] <- NA
 
 case_data_path = args[1] # case_data_path = '../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv'
-demographic_data_path = args[2] #demographic_data_path = '../results/processed_data/demographic_data.csv'
+demographic_data_path = args[2] # demographic_data_path = '../results/processed_data/demographic_data.csv'
 intensity_scores_path = args[3] # intensity_scores_path = '../results/processed_data/intensity_scores.csv'
 lineage_frequencies_path = args[4] # lineage_frequencies_path = '../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv'
 season_incidence_curves_path = args[5] # season_incidence_curves_path = '../results/processed_data/season_incidence_curves.csv'

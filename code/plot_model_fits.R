@@ -17,7 +17,7 @@ source('basic_parameters.R')
 source('imprinting_probabilites.R')
 
 # Function for generating stochastic multinomial realizations of model predictions
-source('generate_synthetic_data.R')
+source('synth_data_functions.R')
 
 # Plotting functions
 source('base_plotting_functions.R')

@@ -239,8 +239,8 @@ main <- function(main_directory, is_synthetic){
                                    recursive = F)
   profile_directories <- str_replace(profile_directories,'//','/')
   if(is_synthetic){
-    true_parameter_values_path <- list.files(main_directory, pattern = 'pars.txt')
-    true_parameter_values_path <- paste0(main_directory, true_parameter_values_path)
+    ####### REVISE true_parameter_values_path <- list.files(main_directory, pattern = 'pars.txt')
+    ####### REVISE true_parameter_values_path <- paste0(main_directory, true_parameter_values_path)
   }else{
     true_parameter_values_path <- NA
   }
