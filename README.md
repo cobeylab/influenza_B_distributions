@@ -17,13 +17,14 @@ Code and data for Vieira et al., 2020 (Lineage-specific protection and immune im
 
 
 ## Code
-
 The core analysis is executed by `likelihood_profile.R`, which takes paths to the fitting data and covariates along with the names of one or two parameters to profile over the specified intervals at the specified increments. For each parameter value (or combination of values) to profile, `likelihood_profile.R` then generates a specification file which is passed on to `fixed_pars_likelihood.R` via a sbatch file created by the script assuming a cluster with SLURM (detailed configurations are user-specific). `fixed_pars_likelihood.R` then uses package `optimParallel` to find the maximum likelihood combination of the remaining parameters.
 
 Given a path to a directory, `combine_likprofile_csvs.R` looks for a `likelihood_profiles/` folder containing subfolders with likelihood profiles of different parameters (one csv file for each parameter value/combination) and combines them into `likelihood_profiles/combined_likelihood_profiles.csv`. 
 
 `plot_model_fits.R` searches for the global maximum likelihood parameter estimates and plots the model predictions under the MLE. It requires that most of the inputs used by `likelihood_profile.R` be collected into an input file assumed to be in the directory containing `combined_likelihood_profiles.csv`. An example input file is given in the comments.
 
+### Note: 
+While the 'VY' subscript indicates protection from B/Yamagata against B/Victoria in the paper, variables with the `_VY` in the code and its output refer to protection from B/Victoria against B/Yamagata (and similarly for other cross-lineage protection subscripts).
 
 ## Dependencies
 The analyses were run using R version 3.4.3 and the following packages
