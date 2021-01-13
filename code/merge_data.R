@@ -13,20 +13,6 @@ merge_data <- function(demographic_data, case_data){
   double_dem_tibble <- bind_rows(mutate(demographic_data, lineage = 'B/Victoria'),
                                  mutate(demographic_data, lineage = 'B/Yamagata'))
   
-  # Check if case data is separated by surveillance type
-  if("SurveillanceType" %in% names(case_data)){
-    stopifnot(all(unique(case_data$country) == 'New Zealand'))
-    multinomial_draw_unit <- c(multinomial_draw_unit, 'SurveillanceType')
-    output_vars <- c('SurveillanceType', output_vars)
-    full_join_vars <- c('SurveillanceType', full_join_vars)
-    
-    # If so, duplicate tibble again to represent sentinel and non-sentinel surveillance
-    double_dem_tibble <- bind_rows(mutate(double_dem_tibble, SurveillanceType = 'Sentinel Surveillance'),
-                                   mutate(double_dem_tibble, SurveillanceType = 'Other Influenza Surveillance')) %>%
-      filter(country == "New Zealand")
-    
-  }
-  
   # Filter demography tibble to retain only obs. years when there were cases
   double_dem_tibble <- filter(double_dem_tibble, observation_year %in% unique(case_data$observation_year)) %>%
     filter()

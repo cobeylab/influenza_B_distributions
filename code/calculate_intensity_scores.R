@@ -26,8 +26,6 @@ initial_beta_parameters = list(shape1 = 2, shape2 = 2)
 # Mininum number of cases in a season (below which cumulative incidence is calculated from beta fit)
 min_total_cases = 50
 
-
-
 # Function for filling NAs in the specified column of a tibble by either averaging or sampling from non NA values
 fill_nas <- function(df, variable, method){
   variable <- enquo(variable)
@@ -99,7 +97,7 @@ interpolate_cumulative_incidence <- function(season_start_year, season_week, cum
 }
 
 # Function for calculating season-level intensity scores
-get_ausnz_intensity_scores <- function(surveillance_data_directory, case_data_directory, na_fill_method){
+get_intensity_scores <- function(surveillance_data_directory, case_data_directory, na_fill_method){
   # =============================================================================================
   # =========== Read and process surveillance data to calculate between season intensity ========
   # =============================================================================================
@@ -324,12 +322,18 @@ get_season_incidence_curves <- function(cumulative_incidence_data){
 }  
 
 # Exporting intensity scores
-ausnz_intensity_scores <- get_ausnz_intensity_scores(surveillance_data_directory, case_data_directory, na_fill_method = 'average')
+ausnz_intensity_scores <- get_intensity_scores(surveillance_data_directory, case_data_directory, na_fill_method = 'average')
 
 ausnz_intensity_scores <- ausnz_intensity_scores %>%
   # Set intensity to 0 before B_origin_year
   mutate(B_intensity = ifelse(season_start_year < B_origin_year,0, B_intensity),
          intensity_score = ifelse(season_start_year < B_origin_year,0, intensity_score))
+
+# For additional fit to European gisaid data, assume intensity scores = 1
+ausnz_intensity_scores <- bind_rows(ausnz_intensity_scores,
+                                    ausnz_intensity_scores %>% filter(country == 'New Zealand') %>%
+                                      mutate(country = 'Europe', B_intensity = NA, intensity_score = 1))
+
 write.csv(ausnz_intensity_scores,'../results/processed_data/intensity_scores.csv', row.names = F)
 
 # Exporting interpolated/estimated curves for fraction of cases experienced as time within seasons
@@ -340,6 +344,12 @@ season_cumulative_incidence_ausnz <- bind_rows(get_season_incidence_curves(cumul
                                                  mutate(country = 'New Zealand') %>% select(year, week, country, everything()),
                                                get_season_incidence_curves(cumulative_incidence_data_aus)%>%
                                                  mutate(country = 'Australia') %>% select(year, week, country, everything()))
+
+# For additional fit to European gisaid data, assume season intensity curves equal to those of New Zealand
+season_cumulative_incidence_ausnz <- bind_rows(season_cumulative_incidence_ausnz,
+                                               season_cumulative_incidence_ausnz %>% filter(country == 'New Zealand') %>%
+                                                 mutate(country = 'Europe'))
+
 write.csv(season_cumulative_incidence_ausnz, '../results/processed_data/season_incidence_curves.csv', row.names = F)
 
 
@@ -389,14 +399,14 @@ write.csv(season_cumulative_incidence_ausnz, '../results/processed_data/season_i
 # Plot with cumulative fraction of cases over time
 
 season_cumulative_incidence_ausnz_pl <- season_cumulative_incidence_ausnz %>%
-  filter(cumulative_B_fraction_source != 'beta function') %>%
+  filter(cumulative_B_fraction_source != 'beta function', country != 'Europe') %>%
   ggplot(aes(x = cumulative_season_fraction, y = cumulative_B_fraction)) +
   geom_line(aes(color = factor(season_start_year))) +
   geom_point(aes(color = factor(season_start_year),
                  shape = factor(cumulative_B_fraction_source,
                                 levels = c('observed','interpolated')))) +
   # Beta function predictions are the same for all years w/o data; choosing 2000
-  geom_line(data = filter(season_cumulative_incidence_ausnz, year == 2000), size = 1.5) +
+  geom_line(data = filter(season_cumulative_incidence_ausnz, year == 2000, country != 'Europe'), size = 1.5) +
   xlab('Fraction of the season') +
   ylab('Cumulative fraction of B cases') +
   scale_color_discrete(name = 'Season') +

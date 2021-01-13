@@ -8,25 +8,13 @@ get_first_seasons_data <- function(birth_year, country_name,season_incidence_cur
   # season_incidence_curves: object produced by calculate_intensity_scores.R with shape of each season
   # intensity scores: object procuced by calculate_intensity_scores.R with season-level intensity
   
-  if(country_name %in% c('United States', 'Canada')){
-    # For b. year X in United states or Canada, get data for seasons X-1/X and X/X+1
-    first_seasons_data <- left_join(season_incidence_curves %>% filter(year %in% c(birth_year, birth_year + 1),
-                                                                       country == country_name),
-                                    intensity_scores  %>% filter(country == country_name) %>% 
-                                      select(season_start_year, intensity_score),
-                                    by = 'season_start_year') %>%
-      # Remove season X+1/X+2
-      filter((year == birth_year + 1 & season_start_year == birth_year + 1) == F)
-  }else{
-    # For b. year X in Australia / NZ, only need to get data for season X
-    stopifnot(country_name %in% c('Australia','New Zealand'))
-    first_seasons_data <- left_join(season_incidence_curves %>% 
-                                      filter(year == birth_year,country == country_name),
-                                    intensity_scores  %>%
-                                      filter(country == country_name) %>% 
-                                      select(season_start_year, intensity_score),
-                                    by = 'season_start_year') 
-  }
+  first_seasons_data <- left_join(season_incidence_curves %>% 
+                                    filter(year == birth_year,country == country_name),
+                                  intensity_scores  %>%
+                                    filter(country == country_name) %>% 
+                                    select(season_start_year, intensity_score),
+                                  by = 'season_start_year') 
+
   # If birth year spans a season for which intensity score is not available, assume intensity score is 1
   first_seasons_data <- mutate(first_seasons_data,
                                intensity_score = ifelse(is.na(intensity_score), 1, intensity_score)) %>%
@@ -62,10 +50,10 @@ birth_year_attack_rates <- function(base_attack_rate_preschool, birth_year, coun
                                          effective_birth_week - n_weeks_in_birth_year, effective_birth_week)) %>%
     select(country, birth_year, birth_week, effective_birth_week, effective_birth_year)
   
-  # For Australia and NZ, ignore effective birth weeks that fall into the next year (and thus season)
-  if(country_name %in% c('Australia','New Zealand')){
-    results <- filter(results, effective_birth_year == birth_year)
-  }
+  # Ignore effective birth weeks that fall into the next year (and thus season)
+  
+  results <- filter(results, effective_birth_year == birth_year)
+  
   
   # Map data on shape and intensity from first_seasons_data onto tibble with effective b. years and weeks
   results <- left_join(results, 
@@ -585,15 +573,12 @@ calculate_iprobs_byear <- function(birth_year, min_obs_year, max_obs_year, count
     # Add probability of being fully naive
     joint_probs <- left_join(naive_probs, joint_probs, by = 'observation_year')
     
-    # In the U.S., probs when obs. year = birth year are automatically taken care of because born in Y can experience Y - 1
-    if(country_name %in% c('Australia','New Zealand')){
-      # But in Aus/NZ, individuals observed in the season starting in their birth year are assumed to be fully naive
-      birth_year_row = c(birth_year, birth_year, 1, rep(0,length(names(joint_probs)[-1]) -2))
-      names(birth_year_row) = names(joint_probs)
-      joint_probs <- bind_rows(as_tibble(rbind(birth_year_row)), joint_probs)
-    }else{
-      stopifnot(country_name == 'United States')
-    }
+    
+    # But in Aus/NZ, individuals observed in the season starting in their birth year are assumed to be fully naive
+    birth_year_row = c(birth_year, birth_year, 1, rep(0,length(names(joint_probs)[-1]) -2))
+    names(birth_year_row) = names(joint_probs)
+    joint_probs <- bind_rows(as_tibble(rbind(birth_year_row)), joint_probs)
+    
     joint_probs <- joint_probs %>% mutate(country = country_name) %>% select(country, everything())
     
   }else{
