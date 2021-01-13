@@ -28,7 +28,6 @@ gisaid_genbank_frequencies_global <- as_tibble(read.csv('../results/processed_da
 gisaid_genbank_frequencies_global_noVicin1990s <- as_tibble(read.csv('../results/processed_data/lineage_frequencies_gisaid-genbank_noVicin1990s.csv',
                                                         header = T)) %>%
   mutate(type = 'genetic',
-         country = 'All countries',
          source = 'Gisaid/Genbank (All countries + no Vic in 1990s)') %>%
   select(year,year_total, country, fraction_yamagata, fraction_victoria, type, source)
 
@@ -48,12 +47,18 @@ surveillance_frequencies <- bind_rows(
   rename(type = method) %>%
   mutate(type = as.character(type))
 
-lineage_frequencies <- bind_rows(gisaid_genbank_frequencies, surveillance_frequencies)
+lineage_frequencies <- bind_rows(gisaid_genbank_frequencies, surveillance_frequencies) %>%
+  filter(!is.na(country))
+lineage_frequencies <- lineage_frequencies %>%
+  mutate(country = factor(country,
+                          levels = c('New Zealand','Australia','United States',
+                                     'Europe','China','Japan', ' All countries')))
 
 # ---------------------------------------------------- Plots ---------------------------------------------------
 surveillance_vs_gisaid_genbank_freqs_pl <- ggplot(lineage_frequencies %>%
                                                     filter(is.na(fraction_yamagata) == F,
                                                            country != 'All countries',
+                                                           source != "Gisaid/Genbank (All countries + no Vic in 1990s)",
                                                            year > 1983),
        aes(x = year, y = fraction_yamagata)) +
   geom_point(aes(color = factor(source)), alpha = 0.8) +
@@ -77,26 +82,26 @@ surveillance_vs_gisaid_genbank_freqs_pl <- ggplot(lineage_frequencies %>%
 
 save_plot('../figures/lineage_frequencies/surveillance_vs_gisaid_genbank_freqs.pdf',
           surveillance_vs_gisaid_genbank_freqs_pl,
-          base_height = 5, base_width = 10)
+          base_height = 10, base_width = 10)
 
-lineage_frequencies %>% filter(source == 'Gisaid/Genbank (All countries + no Vic in 1990s)')
+
 
 # Plot with lineage frequencies used in the model, assuming all Yam in the 90s
-lineage_frequencies %>% filter(source == 'Gisaid/Genbank (local)', country == 'New Zealand', year >= 1988)
-
 local_points <- lineage_frequencies %>% filter(source == 'Gisaid/Genbank (local)', country == 'New Zealand', year >= 1990) %>%
   filter(!is.na(year_total)) %>%
   filter((year <= 2000) | (year > 2000 & year_total >= 10)) %>%
   mutate(source = 'New Zealand and Australia isolates')
 
-global_points <- lineage_frequencies %>% filter(year >= 2001, source == "Gisaid/Genbank (All countries + no Vic in 1990s)") %>%
+global_points <- lineage_frequencies %>% filter(year >= 2001, country == 'New Zealand',
+                                                source == "Gisaid/Genbank (All countries + no Vic in 1990s)") %>%
   filter((year %in% unique(local_points$year)) == F) %>% unique() %>%
   mutate(source = 'Isolates from all represented countries')
 
 points <- bind_rows(local_points, global_points) %>% arrange(year)
 
 
-lineage_frequencies_gisaid_genbank_noVicin1990s <- ggplot(lineage_frequencies %>% filter(source == "Gisaid/Genbank (All countries + no Vic in 1990s)",
+lineage_frequencies_gisaid_genbank_noVicin1990s <- 
+  ggplot(lineage_frequencies %>% filter(source == "Gisaid/Genbank (All countries + no Vic in 1990s)",
                                       year >= 1988), aes(x = year, y = fraction_yamagata)) +
   geom_line(alpha = 0.5) + 
   geom_point(data = points, shape = 21, size = 6, (aes(fill = source))) +
@@ -122,22 +127,5 @@ lineage_frequencies_gisaid_genbank_noVicin1990s <- ggplot(lineage_frequencies %>
 
 save_plot('../figures/lineage_frequencies/lineage_frequencies_gisaid-genbank_ausnz_noVicin1990s.pdf',
           lineage_frequencies_gisaid_genbank_noVicin1990s,base_width = 10, base_height = 4)
-
-
-# Plot with antigenic frequencies overlaid across countries
-# lineage_frequencies_surveillance_raw_pl <- ggplot(lineage_frequencies %>%
-#                                          filter(is.na(fraction_yamagata) == F,
-#                                                 source == 'surveillance reports'),
-#                                        aes(x = year, y = fraction_yamagata)) +
-#   geom_point(aes(color = factor(country)), alpha = 0.9) +
-#   geom_line(aes(color = factor(country)), alpha = 0.9)  +
-#   xlab('Year (season start)') +
-#   ylab('Frequency of B/Yamagata') +
-#   scale_x_continuous(breaks = seq(1980,2020,2)) +
-#   scale_color_brewer(type = 'qual', palette = 2, name = 'Country')
-# 
-# save_plot('../figures/lineage_frequencies/lineage_frequencies_surveillance_raw.pdf',
-#           lineage_frequencies_surveillance_raw_pl,
-#           base_height = 4, base_width = 14)
 
 

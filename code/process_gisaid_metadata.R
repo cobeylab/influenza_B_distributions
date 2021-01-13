@@ -53,7 +53,6 @@ gisaid_B_data <- gisaid_B_data %>%
 
 write.csv(gisaid_B_data, '../data/gisaid_metadata/gisaid_metadata.csv', row.names = F)
 
-
 gisaid_data_by_lineage_and_age <- gisaid_B_data %>%
   filter(!is.na(lineage), host_age_unit %in% c('Y','M')) %>%
   filter(!is.na(host_age)) %>%
@@ -62,15 +61,29 @@ gisaid_data_by_lineage_and_age <- gisaid_B_data %>%
   select(isolate_name, lineage, year, continent, country, host_age) %>% 
   unique()
 
-
 gisaid_data_by_lineage_and_age %>%
   group_by(continent) %>%
   count()
 
 gisaid_data_by_lineage_and_age %>% 
   filter(continent == 'Europe') %>%
-  group_by(year) %>%
-  count()
+  group_by(country) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  ungroup() %>%
+  mutate(cum_sum = cumsum(n))
+
+gisaid_data_by_lineage_and_age %>%
+  filter(country == 'Spain') %>%
+  mutate(minimum_birth_year = year - host_age - 1) %>%
+  filter(minimum_birth_year >= 1959) %>%
+  group_by(minimum_birth_year, lineage) %>%
+  summarise(n_cases = n()) %>%
+  group_by(lineage) %>%
+  mutate(fraction_cases = n_cases / sum(n_cases)) %>%
+  ggplot(aes(x = minimum_birth_year, y = fraction_cases)) + geom_col() + facet_grid(.~lineage) +
+  xlab('Year of birth') +
+  ylab('Fraction of isolates')
 
 pooled_age_dist_europe <- gisaid_data_by_lineage_and_age %>%
   filter(continent == 'Europe') %>%
@@ -160,4 +173,6 @@ age_dist_by_season_japan <- gisaid_data_by_lineage_and_age %>%
   ylab('Fraction of isolates')
 save_plot('../figures/gisaid_age_dist_japan_by_season.pdf', age_dist_by_season_japan,
           base_height = 10, base_width = 9)
+
+# WHEN EXPORTING CASE DATA. MAKE SURE COUNTRY COLUMN SAYS 'EUROPE' FOR THE EUROPE DATASET (OTHERWISE WILL FIT BY INDIVIDUAL COUNTRIES)
 

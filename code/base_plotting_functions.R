@@ -1,6 +1,4 @@
-# Functions for plotting model fits. Called by plot_model_fits.R and exploratory_prediction_plots.R
-# Function for generating stochastic multinomial realizations of model predictions
-source('generate_synthetic_data.R')
+# Functions for plotting model fits. Called by plot_model_fits.R 
 
 # Function for adjusting predictions so all cohorts are plotted by specified cohort type (age or b. year)
 set_data_to_cohort_type <- function(predictions, plot_cohort_type){

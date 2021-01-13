@@ -1,3 +1,4 @@
+library(tidyr)
 library(dplyr)
 library(reshape2)
 library(stringr)
@@ -30,20 +31,40 @@ main <- function(){
   nz_demographics <- as_tibble(nz_demographics) %>%
     mutate(age = as.integer(str_extract(age,'[0-9]+')))
   
-  # Merge Australian and NZ tibbles
-  ausnz_demographic_data <- bind_rows(
-    mutate(aus_demographics, country = 'Australia'),
-    mutate(nz_demographics, country = 'New Zealand')
-  ) %>% 
-    # Add variable "region"
-    mutate(region = 'AUSNZ') %>%
+  # Process EU demography
+  format_eu_demography <- function(eu_demography_file_path){
+    as_tibble(read.table(eu_demography_file_path, sep = '\t', header = T)) %>%
+      rename(age = freq.unit.age.sex.geo.TIME_PERIOD) %>%
+      mutate(age = as.character(age)) %>%
+      mutate(age = ifelse(grepl('Y_LT1',age), 'Y0', age)) %>%
+      mutate(age = str_extract(age,'Y[0-9]*')) %>%
+      mutate(across(matches('X20'), as.character)) %>%
+      pivot_longer(cols = matches('X20'),
+                   names_to = 'year', values_to = 'n_persons') %>%
+      mutate(n_persons = ifelse(n_persons == ': ',NA, n_persons)) %>%
+      mutate(age = as.integer(str_replace(age, 'Y','')),
+             year = as.integer(str_replace(year,'X','')),
+             n_persons = as.integer(str_remove_all(n_persons,'[a-z]*'))) %>%
+      arrange(age) %>%
+      select(year, age, n_persons)
+  }
+  
+  eu_demography_2007_2012 <- format_eu_demography('../data/demographic_data/EU_demographics_27_countries_2007-2012.tsv')
+  eu_demography_2013_2020 <- format_eu_demography('../data/demographic_data/EU_demographics_28_countries_2013-2020.tsv')
+  
+  # Merge tibbles
+  demographic_data <- bind_rows(
+    mutate(aus_demographics, country = 'Australia', region = 'AUSNZ'),
+    mutate(nz_demographics, country = 'New Zealand', region = 'AUSNZ'),
+    mutate(eu_demography_2007_2012, country = 'Europe', region = 'Europe'),
+    mutate(eu_demography_2013_2020, country = 'Europe', region = 'Europe')
+    ) %>% 
     # Rename age as "cohort_value" and create new variable "cohort_type" equal to "age"
     rename(cohort_value = age) %>%
     mutate(cohort_type = 'age') %>%
     select(country, region, year, cohort_type, cohort_value, n_persons)
     
-  # Merge with AUS/NZ and US data:
-  demographic_data <- ausnz_demographic_data %>%
+  demographic_data <- demographic_data %>%
     mutate(cohort_value = as.character(cohort_value))
   
   # Add minimum possible birth year for each cohort (cohorts identified by age in a given obs. year have 2 possible b. years)
@@ -58,8 +79,7 @@ main <- function(){
 demographic_data <- main()
 write.csv(demographic_data, paste0(output_directory, 'demographic_data.csv'), row.names = F)
 
-normalize_demographic_data(demographic_data %>% filter(cohort_value < 90),1500) %>%
-  filter(country %in% c('New Zealand')) %>%
+normalize_demographic_data(demographic_data %>% filter(country == 'New Zealand', cohort_value < 90),1500) %>%
   mutate(cohort_value = as.numeric(cohort_value)) %>%
   mutate(min_birth_year = observation_year - cohort_value - 1) %>%
   group_by(country, observation_year) %>%
@@ -70,8 +90,9 @@ normalize_demographic_data(demographic_data %>% filter(cohort_value < 90),1500) 
   geom_line()+
   geom_point()
 
-general_population_age <- normalize_demographic_data(demographic_data, 1900) %>%
-  filter(country %in% c('Australia','New Zealand')) %>%
+general_population_age <- normalize_demographic_data(demographic_data %>% 
+                                                       filter(country %in% c('Australia', 'New Zealand')),
+                                                     1900) %>%
   mutate(cohort_value = as.numeric(cohort_value)) %>%
   filter(observation_year %in% c(2002,2005,2008,2012)) %>%
   filter(!(cohort_value >= 90 & country == 'New Zealand')) %>%
@@ -85,8 +106,7 @@ general_population_age <- normalize_demographic_data(demographic_data, 1900) %>%
 save_plot('../figures/general_population_age_distribution.pdf',general_population_age,
           base_height = 7, base_width = 5)
 
-normalize_demographic_data(demographic_data, 1952) %>%
-  filter(country %in% c('Australia','New Zealand')) %>%
+normalize_demographic_data(demographic_data %>% filter(country %in% c('Australia', 'New Zealand')), 1952) %>%
   mutate(cohort_value = as.numeric(cohort_value)) %>%
   mutate(min_birth_year = observation_year - cohort_value - 1) %>%
   filter(observation_year %in% c(2002,2005,2008,2011)) %>%

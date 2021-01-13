@@ -8,11 +8,18 @@ library(lubridate)
 output_directory <- '../results/processed_data/'
 
 assign_region <- function(combined_isolate_data){
-  regions <- tibble(country = c('United States','Australia','New Zealand'),
+    regions <- tibble(country = c('United States','Australia','New Zealand'),
          region = c('United States', 'AUSNZ','AUSNZ'))
-  return(left_join(combined_isolate_data,regions, by = 'country'))
+    
+    modified_tibble <- left_join(combined_isolate_data,regions, by = 'country')
+    
+    modified_tibble <- modified_tibble %>%
+      mutate(region = ifelse(country == 'China', 'China', region)) %>%
+      mutate(region = ifelse(country == 'Japan', 'Japan', region)) %>%
+      mutate(region = ifelse(continent == 'Europe', 'Europe', region))
+    
+  return(modified_tibble)
 }
-
 
 main <- function(){
   genbank_B_data <- read.csv('../data/genbank_data/genbank_data.csv', header = T)
@@ -119,8 +126,9 @@ main <- function(){
            fraction_victoria = 1 - fraction_yamagata) %>% ungroup()
   
   # Calculate relative lineage frequencies in Australia/NZ
-  lineage_frequency_data_AUSNZ <- combined_isolate_data %>% 
-    filter(region == 'AUSNZ') %>%
+  lineage_frequency_data_AUSNZ <- combined_isolate_data %>%
+    # Adding Europe, China and Japan to this tibble to address reviewers' request
+    filter(region %in% c('AUSNZ','Europe','China','Japan')) %>%
     group_by(year, region) %>% 
     summarise(n_yamagata = sum(lineage == 'Yamagata'),
               n_victoria = sum(lineage == 'Victoria')) %>%
@@ -129,17 +137,14 @@ main <- function(){
            fraction_victoria = 1 - fraction_yamagata) %>% ungroup()
   
   # Add years not represented in each region (to be filled with U.S. or global data)
-  all_years <-  seq(min(lineage_frequency_data_global$year), max(lineage_frequency_data_global$year))
-  years_missing_US <- all_years[all_years %in% lineage_frequency_data_US$year == F]
-  years_missing_AUSNZ <- all_years[all_years %in% lineage_frequency_data_AUSNZ$year == F]
-
-  lineage_frequency_data_AUSNZ <- full_join(tibble(region = 'AUSNZ', year = years_missing_AUSNZ),
-                                            lineage_frequency_data_AUSNZ) %>%
-    arrange(year)
+  lineage_frequency_data_AUSNZ <- left_join(tibble(expand.grid(region = unique(lineage_frequency_data_AUSNZ$region),
+                                                               year = seq(min(lineage_frequency_data_AUSNZ$year),
+                                                                          max(lineage_frequency_data_AUSNZ$year)))),
+            lineage_frequency_data_AUSNZ)
   
-  lineage_frequency_data_US <- full_join(tibble(region = 'United States', year = years_missing_US),
-                                            lineage_frequency_data_US) %>%
-    arrange(year)
+  lineage_frequency_data_US <- left_join(tibble(year = seq(min(lineage_frequency_data_US$year),
+                                                                   max(lineage_frequency_data_US$year))),
+                                     lineage_frequency_data_US)
   
   # For years with fewer than 10 isolates, fill with data from all countries combined
   lineage_frequency_data_AUSNZ_adjusted <- left_join(lineage_frequency_data_AUSNZ,
@@ -147,10 +152,10 @@ main <- function(){
                                                      select(year, fraction_yamagata_global, fraction_victoria_global, year_total_global),
                                                      by = 'year') %>%
     rowwise() %>%
-    mutate(data_source = ifelse(year_total >=10 & is.na(year_total) == F, 'AUSNZ','all countries'),
-           fraction_yamagata = ifelse(data_source == 'AUSNZ', fraction_yamagata, fraction_yamagata_global),
-           fraction_victoria = ifelse(data_source == 'AUSNZ', fraction_victoria, fraction_victoria_global),
-           year_total = ifelse(data_source == 'AUSNZ', year_total, year_total_global)) %>%
+    mutate(data_source = ifelse(year_total >=10 & is.na(year_total) == F, region,'all countries'),
+           fraction_yamagata = ifelse(data_source != 'all countries', fraction_yamagata, fraction_yamagata_global),
+           fraction_victoria = ifelse(data_source != 'all countries', fraction_victoria, fraction_victoria_global),
+           year_total = ifelse(data_source != 'all countries', year_total, year_total_global)) %>%
     ungroup()%>%
     select(-matches('_global'))
   
@@ -166,7 +171,7 @@ main <- function(){
 
   # Assume that ancestral lineage had frequency 1 prior to 1988 (B intensity will be set to 0 prior to some origin year separately)
   split_year = 1988
-  lineage_frequency_data_AUSNZ_adjusted <- full_join(as_tibble(expand.grid(country = c('Australia','United States','China','New Zealand'),
+  lineage_frequency_data_AUSNZ_adjusted <- full_join(as_tibble(expand.grid(country = unique(lineage_frequency_data_AUSNZ_adjusted$country),
                                   year = 1900:(split_year-1))) %>%
                                     mutate(fraction_ancestor = 1),
                                   lineage_frequency_data_AUSNZ_adjusted %>%
@@ -198,23 +203,21 @@ write.csv(lineage_frequency_data$adjusted, paste0(output_directory, 'lineage_fre
 write.csv(lineage_frequency_data$raw, paste0(output_directory, 'lineage_frequencies_gisaid-genbank_raw.csv'), row.names = F)
 write.csv(lineage_frequency_data$global, paste0(output_directory, 'lineage_frequencies_gisaid-genbank_global.csv'), row.names = F)
 
+lineage_frequencies_gisaid_genbank_noVicin1990s <- lineage_frequency_data$adjusted %>%
+  mutate(fraction_yamagata = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')) , 1, fraction_yamagata),
+         fraction_victoria = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), 0, fraction_victoria),
+         n_yamagata = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, n_yamagata),
+         n_victoria = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, n_victoria),
+         year_total = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, year_total),
+         data_source = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')),
+                              'assuming_no_vic_in_1990s', data_source))
+
+write.csv(lineage_frequencies_gisaid_genbank_noVicin1990s,
+          paste0(output_directory, 'lineage_frequencies_gisaid-genbank_noVicin1990s.csv'), row.names = F)
 
 # ----------------------------- Plots with fraction Yamagata over time ----------------------
-raw_freq_comparison <- bind_rows(lineage_frequency_data$raw %>%
-                                   filter(country != 'New Zealand') %>%
-                                   select(country, year, fraction_yamagata),
-                                 lineage_frequency_data$global_minus_AUSNZ %>%
-                                   mutate(country = 'All countries except Australia/New Zealand') %>%
-                                   rename(fraction_yamagata = fraction_yamagata_global,
-                                          fraction_victoria = fraction_victoria_global) %>%
-                                   select(country, year, fraction_yamagata)) %>% 
-  arrange(year) %>%
-  mutate()
-
 # Plot with adjusted fraction
-yam_freq_ausnz <- ggplot(assign_region(lineage_frequency_data$adjusted) %>%
-                                       mutate(region = ifelse(region == 'AUSNZ','Australia / New Zealand',region)) %>%
-                                       filter(year >=1984, country == 'Australia',
+yam_freq_ausnz <- ggplot(lineage_frequency_data$adjusted %>% filter(year >=1984, country == 'New Zealand',
                                               data_source!= 'presumed_ancestor'),
                                      aes(x = year, y = fraction_yamagata, label = year_total)) +
   geom_line(alpha = 0.5) + geom_point(shape = 21, size = 6, (aes(fill = data_source))) +

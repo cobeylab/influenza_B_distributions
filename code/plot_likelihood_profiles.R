@@ -261,6 +261,7 @@ main <- function(main_directory, is_synthetic){
               true_parameter_values_path = true_parameter_values_path)
   names(profile_plots) <- profiled_parameters
 
+  # Note that we've inverted the order of the subscript cross-lineage protection in the labels for the manuscript
   main_panel <- plot_grid(
     profile_plots$chi_V + 
       xlab(expression("Homologous protection from prior B/Vic exposure, "~italic(chi[VV]))),

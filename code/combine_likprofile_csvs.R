@@ -4,7 +4,7 @@ library(tidyr)
 library(stringr)
 
 args <- commandArgs(trailingOnly = TRUE)
-main_directory <- args[1] # results_directory <- '../results/fitting_replicates/simulated_data/2018-06-11/'
+main_directory <- args[1] 
 
 update_reporting_factor_cols <- function(profile_tibble){
   # Renames reporting parameters for old runs of the single-rho (main) model, which used to be labelled according to country
