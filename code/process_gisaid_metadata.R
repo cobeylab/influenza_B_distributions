@@ -93,8 +93,34 @@ gisaid_EU_data_by_lineage_and_age <- gisaid_data_by_lineage_and_age %>%
          minimum_birth_year, lineage, n_cases) %>%
   arrange(observation_year, cohort_value)
   
+
 write.csv(gisaid_EU_data_by_lineage_and_age %>% filter(observation_year >= 2008),
           '../results/processed_data/case_data_europe_gisaid.csv', row.names = F)
+
+# China cases:
+gisaid_data_by_lineage_and_age %>%
+  filter(country %in% c('China','Hong Kong (SAR)')) %>%
+  group_by(country) %>% count()
+
+gisaid_data_by_lineage_and_age %>%
+  filter(country %in% c('China','Hong Kong (SAR)')) %>%
+  group_by(year) %>% count()
+
+gisaid_china_data_by_lineage_and_age <- gisaid_data_by_lineage_and_age %>%
+  filter(country %in% c('China','Hong Kong (SAR)')) %>%
+  group_by(year, host_age, lineage) %>%
+  summarise(n_cases = n()) %>%
+  ungroup() %>%
+  mutate(minimum_birth_year = year - host_age - 1) %>%
+  rename(cohort_value = host_age, observation_year = year) %>%
+  mutate(country = 'China', region = 'China', cohort_type = 'age') %>%
+  select(country, region, observation_year, cohort_type, cohort_value,
+         minimum_birth_year, lineage, n_cases) %>%
+  arrange(observation_year, cohort_value)
+
+write.csv(gisaid_china_data_by_lineage_and_age %>% filter(observation_year >= 2009),
+          '../results/processed_data/case_data_china_gisaid.csv', row.names = F)
+
 
 # PLOTS
 pooled_age_dist_europe <- gisaid_EU_data_by_lineage_and_age %>%
@@ -122,62 +148,28 @@ age_dist_by_season_europe <- gisaid_EU_data_by_lineage_and_age %>%
 save_plot('../figures/gisaid_age_dist_europe_by_season.pdf', age_dist_by_season_europe,
           base_height = 10, base_width = 9)
 
-pooled_age_dist_china <- gisaid_data_by_lineage_and_age %>%
-  filter(country == 'China') %>%
-  mutate(minimum_birth_year = year - host_age - 1) %>%
+pooled_age_dist_china <- gisaid_china_data_by_lineage_and_age %>%
   filter(minimum_birth_year >= 1959) %>%
   group_by(minimum_birth_year, lineage) %>%
-  summarise(n_cases = n()) %>%
+  summarise(n_cases = sum(n_cases)) %>%
   group_by(lineage) %>%
   mutate(fraction_cases = n_cases / sum(n_cases)) %>%
   ggplot(aes(x = minimum_birth_year, y = fraction_cases)) + geom_col() + facet_grid(.~lineage) +
   xlab('Year of birth') +
-  ylab('Fraction of isolates')
+  ylab('Fraction of isolates') +
+  background_grid() +
+  xlim(1959,2020.5)
 save_plot('../figures/gisaid_age_dist_china_pooled.pdf', pooled_age_dist_china,
           base_height = 5, base_width = 9)
 
-age_dist_by_season_china <- gisaid_data_by_lineage_and_age %>%
-  filter(country == 'China') %>%
-  mutate(minimum_birth_year = year - host_age - 1) %>%
-  filter(minimum_birth_year >= 1959) %>%
-  group_by(minimum_birth_year, year, lineage) %>%
-  summarise(n_cases = n()) %>%
-  group_by(lineage, year) %>%
+age_dist_by_season_china <- gisaid_china_data_by_lineage_and_age %>%
   mutate(fraction_cases = n_cases / sum(n_cases)) %>%
-  ggplot(aes(x = minimum_birth_year, y = fraction_cases)) + geom_col() + 
-  facet_grid(year~lineage, scales = 'free') +
+  ggplot(aes(x = minimum_birth_year, y = n_cases)) + geom_col() + 
+  facet_grid(observation_year~lineage, scales = 'free') +
   xlab('Year of birth') +
-  ylab('Fraction of isolates')
+  ylab('Number of isolates') +
+  background_grid() 
 save_plot('../figures/gisaid_age_dist_china_by_season.pdf', age_dist_by_season_china,
-          base_height = 10, base_width = 9)
-
-pooled_age_dist_japan <- gisaid_data_by_lineage_and_age %>%
-  filter(country == 'Japan') %>%
-  mutate(minimum_birth_year = year - host_age - 1) %>%
-  filter(minimum_birth_year >= 1959) %>%
-  group_by(minimum_birth_year, lineage) %>%
-  summarise(n_cases = n()) %>%
-  group_by(lineage) %>%
-  mutate(fraction_cases = n_cases / sum(n_cases)) %>%
-  ggplot(aes(x = minimum_birth_year, y = fraction_cases)) + geom_col() + facet_grid(.~lineage) +
-  xlab('Year of birth') +
-  ylab('Fraction of isolates')
-save_plot('../figures/gisaid_age_dist_japan_pooled.pdf', pooled_age_dist_japan,
-          base_height = 5, base_width = 9)
-
-age_dist_by_season_japan <- gisaid_data_by_lineage_and_age %>%
-  filter(country == 'Japan') %>%
-  mutate(minimum_birth_year = year - host_age - 1) %>%
-  filter(minimum_birth_year >= 1959) %>%
-  group_by(minimum_birth_year, year, lineage) %>%
-  summarise(n_cases = n()) %>%
-  group_by(lineage, year) %>%
-  mutate(fraction_cases = n_cases / sum(n_cases)) %>%
-  ggplot(aes(x = minimum_birth_year, y = fraction_cases)) + geom_col() + 
-  facet_grid(year~lineage, scales = 'free') +
-  xlab('Year of birth') +
-  ylab('Fraction of isolates')
-save_plot('../figures/gisaid_age_dist_japan_by_season.pdf', age_dist_by_season_japan,
           base_height = 10, base_width = 9)
 
 

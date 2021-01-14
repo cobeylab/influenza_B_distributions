@@ -169,6 +169,9 @@ stopifnot(all(following_cumsum(1:5, last = 0) == c(14,12,9,5,0)))
 merge_atk_rates_and_linfreqs <- function(attack_rates, lineage_frequencies){
   country <- attack_rates$country[1]
   data <- left_join(attack_rates, lineage_frequencies %>% rename(season_start_year = year) %>%
+                      mutate(country = as.character(country)) %>%
+                      # Lineage frequencies calculated from all East Asia are used for China
+                      mutate(country = ifelse(country == 'East Asia', 'China', country)) %>%
                       filter(country == !!country) %>%  select(season_start_year, fraction_yamagata,
                                                                fraction_victoria, fraction_ancestor),
                     by = 'season_start_year')

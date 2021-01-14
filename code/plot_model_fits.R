@@ -237,6 +237,7 @@ main <- function(){
   }
   
   # Plot with fraction of cases aggregated across obs. years and countries
+  # (We're no longer fitting to multiple countries simultaneously)
   fraction_cases_pooled <- plot_pooling_countries(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
                                                   plot_fraction = T, demographic_normalization = F)
   save_plot(paste0(plot_directory,'fraction_cases_pooled.pdf'),

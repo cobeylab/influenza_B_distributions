@@ -329,10 +329,12 @@ ausnz_intensity_scores <- ausnz_intensity_scores %>%
   mutate(B_intensity = ifelse(season_start_year < B_origin_year,0, B_intensity),
          intensity_score = ifelse(season_start_year < B_origin_year,0, intensity_score))
 
-# For additional fit to European gisaid data, assume intensity scores = 1
+# For additional fit to European and Chinese gisaid data, assume intensity scores = 1
 ausnz_intensity_scores <- bind_rows(ausnz_intensity_scores,
                                     ausnz_intensity_scores %>% filter(country == 'New Zealand') %>%
-                                      mutate(country = 'Europe', B_intensity = NA, intensity_score = 1))
+                                      mutate(country = 'Europe', B_intensity = NA, intensity_score = 1),
+                                    ausnz_intensity_scores %>% filter(country == 'New Zealand') %>%
+                                      mutate(country = 'China', B_intensity = NA, intensity_score = 1))
 
 write.csv(ausnz_intensity_scores,'../results/processed_data/intensity_scores.csv', row.names = F)
 
@@ -345,10 +347,12 @@ season_cumulative_incidence_ausnz <- bind_rows(get_season_incidence_curves(cumul
                                                get_season_incidence_curves(cumulative_incidence_data_aus)%>%
                                                  mutate(country = 'Australia') %>% select(year, week, country, everything()))
 
-# For additional fit to European gisaid data, assume season intensity curves equal to those of New Zealand
+# For additional fit to European and Chinese gisaid gisaid data, assume season intensity curves equal to those of New Zealand
 season_cumulative_incidence_ausnz <- bind_rows(season_cumulative_incidence_ausnz,
                                                season_cumulative_incidence_ausnz %>% filter(country == 'New Zealand') %>%
-                                                 mutate(country = 'Europe'))
+                                                 mutate(country = 'Europe'),
+                                               season_cumulative_incidence_ausnz %>% filter(country == 'New Zealand') %>%
+                                                 mutate(country = 'China'))
 
 write.csv(season_cumulative_incidence_ausnz, '../results/processed_data/season_incidence_curves.csv', row.names = F)
 
