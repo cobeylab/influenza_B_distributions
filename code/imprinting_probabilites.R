@@ -573,8 +573,7 @@ calculate_iprobs_byear <- function(birth_year, min_obs_year, max_obs_year, count
     # Add probability of being fully naive
     joint_probs <- left_join(naive_probs, joint_probs, by = 'observation_year')
     
-    
-    # But in Aus/NZ, individuals observed in the season starting in their birth year are assumed to be fully naive
+    # Individuals observed in the season starting in their birth year are assumed to be fully naive
     birth_year_row = c(birth_year, birth_year, 1, rep(0,length(names(joint_probs)[-1]) -2))
     names(birth_year_row) = names(joint_probs)
     joint_probs <- bind_rows(as_tibble(rbind(birth_year_row)), joint_probs)

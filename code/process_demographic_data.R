@@ -12,6 +12,26 @@ output_directory <- '../results/processed_data/'
 # Get start_birth_year from basic_parameters.R
 source('basic_parameters.R')
 
+# Function to expand aggregated age distribution into a tibble at the one-year resolution
+# Distributes the number of persons equally by each year in an interval
+# (Used for the aggregated Chinese demography data)
+expand_age_distribution <- function(dem_data){
+  expanded_tibble <- c()
+  for(y in unique(dem_data$year)){
+    for(group in unique(dem_data$age_group)){
+      bounds <- as.numeric(str_split(group, '-')[[1]])
+      expanded_tibble <- bind_rows(expanded_tibble,
+                                   tibble(year = y, age_group = group, age_group_length = bounds[2] - bounds[1] + 1,
+                                          age = bounds[1]:bounds[2]))
+      
+    }
+  }
+  return(left_join(expanded_tibble, dem_data %>% mutate(age_group = as.character(age_group))) %>%
+           rename(total_in_age_group = n_persons) %>%
+           mutate(n_persons = total_in_age_group / age_group_length) %>%
+           select(year, age, n_persons))
+}
+
 main <- function(){
   # Import Australian and NZ demographic data
   aus_demographics <- read.csv('../data/demographic_data/australian_age_distribution.csv', header = T)
@@ -52,12 +72,29 @@ main <- function(){
   eu_demography_2007_2012 <- format_eu_demography('../data/demographic_data/EU_demographics_27_countries_2007-2012.tsv')
   eu_demography_2013_2020 <- format_eu_demography('../data/demographic_data/EU_demographics_28_countries_2013-2020.tsv')
   
+  # Process China demography
+  china_demography <- as_tibble(read.csv('../data/demographic_data/China_age_distribution.csv')) %>%
+    filter(age_group != '95+')
+  
+  # Fill missing years using the average of neighboring years
+  china_demography <- bind_rows(china_demography,
+                                china_demography %>% filter(year %in% c(2009, 2011)) %>%
+                                  group_by(age_group) %>% summarise(n_persons = mean(n_persons)) %>%
+                                  mutate(year = 2010) %>% ungroup() %>% select(year, age_group, n_persons))
+  # Use 2018 for 2019, since 2018 is the last year in the National Statistics Bureau data.
+  china_demography <- bind_rows(china_demography,
+                                china_demography %>% filter(year == 2018) %>% mutate(year = 2019))
+  
+  china_demography <- expand_age_distribution(china_demography)
+  
+  
   # Merge tibbles
   demographic_data <- bind_rows(
     mutate(aus_demographics, country = 'Australia', region = 'AUSNZ'),
     mutate(nz_demographics, country = 'New Zealand', region = 'AUSNZ'),
     mutate(eu_demography_2007_2012, country = 'Europe', region = 'Europe'),
-    mutate(eu_demography_2013_2020, country = 'Europe', region = 'Europe')
+    mutate(eu_demography_2013_2020, country = 'Europe', region = 'Europe'),
+    china_demography %>% mutate(country = 'China', region = 'China')
     ) %>% 
     # Rename age as "cohort_value" and create new variable "cohort_type" equal to "age"
     rename(cohort_value = age) %>%

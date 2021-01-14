@@ -14,11 +14,27 @@ assign_region <- function(combined_isolate_data){
     modified_tibble <- left_join(combined_isolate_data,regions, by = 'country')
     
     modified_tibble <- modified_tibble %>%
-      mutate(region = ifelse(country == 'China', 'China', region)) %>%
-      mutate(region = ifelse(country == 'Japan', 'Japan', region)) %>%
       mutate(region = ifelse(continent == 'Europe', 'Europe', region))
     
+    east_asia_countries <- c('China', 'Hong Kong (SAR)', 'Korea, Republic of','Japan',
+                             'Mongolia','Taiwan')
+    
+    modified_tibble <- modified_tibble %>%
+      mutate(region = ifelse(country %in% east_asia_countries, 'East Asia', region))
+    
   return(modified_tibble)
+}
+
+
+# Base dplyr pipeline (input object will already be subset and grouped depending on the region)
+estimate_lineage_freqs <- function(combined_isolate_data){
+  combined_isolate_data %>% 
+    summarise(n_yamagata = sum(lineage == 'Yamagata'),
+            n_victoria = sum(lineage == 'Victoria')) %>%
+    mutate(year_total = n_victoria + n_yamagata,
+           fraction_yamagata = n_yamagata / year_total, 
+           fraction_victoria = 1 - fraction_yamagata) %>% 
+    ungroup() 
 }
 
 main <- function(){
@@ -93,49 +109,35 @@ main <- function(){
                                        filter(!is.na(country), continent != '') %>% unique(),
                                      by = 'country')
   
-  # Add variable 'region' ('United States','AUSNZ')
+  # Add variable 'region' 
   combined_isolate_data <- assign_region(combined_isolate_data)
   
   # Calculate relative lineage frequencies in each year (season) pooled across all countries 
-  lineage_frequency_data_global <- combined_isolate_data %>% 
-    group_by(year) %>% 
-    summarise(n_yamagata_global = sum(lineage == 'Yamagata'),
-              n_victoria_global = sum(lineage == 'Victoria')) %>%
-    mutate(year_total_global = n_victoria_global + n_yamagata_global,
-           fraction_yamagata_global = n_yamagata_global / year_total_global, 
-           fraction_victoria_global = 1 - fraction_yamagata_global) %>% ungroup() 
+  lineage_frequency_data_global <- estimate_lineage_freqs(combined_isolate_data %>% group_by(year)) %>%
+    rename(n_yamagata_global = n_yamagata, n_victoria_global = n_victoria,
+           year_total_global = year_total, fraction_yamagata_global = fraction_yamagata,
+           fraction_victoria_global = fraction_victoria)
   
-  # Aggregate frequencies excluding Australia and New Zealand
-  lineage_frequency_data_global_minus_AUSNZ <- combined_isolate_data %>% 
-    filter(country != 'Australia', country != 'New Zealand') %>%
-    group_by(year) %>% 
-    summarise(n_yamagata_global = sum(lineage == 'Yamagata'),
-              n_victoria_global = sum(lineage == 'Victoria')) %>%
-    mutate(year_total_global = n_victoria_global + n_yamagata_global,
-           fraction_yamagata_global = n_yamagata_global / year_total_global, 
-           fraction_victoria_global = 1 - fraction_yamagata_global) %>% ungroup() 
+  # Aggregate frequencies across all countries excluding Australia and New Zealand
+  lineage_frequency_data_global_minus_AUSNZ <- 
+    estimate_lineage_freqs(combined_isolate_data %>% filter(country != 'Australia', country != 'New Zealand') %>%
+                             group_by(year)) %>%
+    rename(n_yamagata_global = n_yamagata, n_victoria_global = n_victoria,
+           year_total_global = year_total, fraction_yamagata_global = fraction_yamagata,
+           fraction_victoria_global = fraction_victoria)
   
   # Calculate relative lineage frequencies in each year (season) in the United States
-  lineage_frequency_data_US <- combined_isolate_data %>% 
-    filter(country == "United States") %>%
-    group_by(year, region) %>% 
-    summarise(n_yamagata = sum(lineage == 'Yamagata'),
-              n_victoria = sum(lineage == 'Victoria')) %>%
-    mutate(year_total = n_victoria + n_yamagata,
-           fraction_yamagata = n_yamagata / year_total, 
-           fraction_victoria = 1 - fraction_yamagata) %>% ungroup()
+  lineage_frequency_data_US <- estimate_lineage_freqs(combined_isolate_data %>% 
+                                                        filter(country == "United States") %>%
+                                                        group_by(year, region))
   
   # Calculate relative lineage frequencies in Australia/NZ
-  lineage_frequency_data_AUSNZ <- combined_isolate_data %>%
-    # Adding Europe, China and Japan to this tibble to address reviewers' request
-    filter(region %in% c('AUSNZ','Europe','China','Japan')) %>%
-    group_by(year, region) %>% 
-    summarise(n_yamagata = sum(lineage == 'Yamagata'),
-              n_victoria = sum(lineage == 'Victoria')) %>%
-    mutate(year_total = n_victoria + n_yamagata,
-           fraction_yamagata = n_yamagata / year_total, 
-           fraction_victoria = 1 - fraction_yamagata) %>% ungroup()
+  # Adding Europe and East Asia to address reviewers comments
+  lineage_frequency_data_AUSNZ <- estimate_lineage_freqs(combined_isolate_data %>%
+                                                           filter(region %in% c('AUSNZ','Europe', 'East Asia')) %>%
+                                                           group_by(year, region))
   
+
   # Add years not represented in each region (to be filled with U.S. or global data)
   lineage_frequency_data_AUSNZ <- left_join(tibble(expand.grid(region = unique(lineage_frequency_data_AUSNZ$region),
                                                                year = seq(min(lineage_frequency_data_AUSNZ$year),
@@ -203,14 +205,18 @@ write.csv(lineage_frequency_data$adjusted, paste0(output_directory, 'lineage_fre
 write.csv(lineage_frequency_data$raw, paste0(output_directory, 'lineage_frequencies_gisaid-genbank_raw.csv'), row.names = F)
 write.csv(lineage_frequency_data$global, paste0(output_directory, 'lineage_frequencies_gisaid-genbank_global.csv'), row.names = F)
 
+
+# Lineage frequencies assuming no Vic from 1988 to 2000 in Europe, New Zealand and Australia
 lineage_frequencies_gisaid_genbank_noVicin1990s <- lineage_frequency_data$adjusted %>%
-  mutate(fraction_yamagata = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')) , 1, fraction_yamagata),
-         fraction_victoria = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), 0, fraction_victoria),
-         n_yamagata = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, n_yamagata),
-         n_victoria = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, n_victoria),
-         year_total = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')), NA, year_total),
-         data_source = ifelse(year>= 1988 & year <= 2000 & !(country %in% c('Japan','China')),
+  mutate(fraction_yamagata = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia' , 1, fraction_yamagata),
+         fraction_victoria = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia', 0, fraction_victoria),
+         n_yamagata = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia', NA, n_yamagata),
+         n_victoria = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia', NA, n_victoria),
+         year_total = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia', NA, year_total),
+         data_source = ifelse(year>= 1988 & year <= 2000 & country != 'East Asia',
                               'assuming_no_vic_in_1990s', data_source))
+
+# 
 
 write.csv(lineage_frequencies_gisaid_genbank_noVicin1990s,
           paste0(output_directory, 'lineage_frequencies_gisaid-genbank_noVicin1990s.csv'), row.names = F)

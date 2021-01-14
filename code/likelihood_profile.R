@@ -143,6 +143,7 @@ generate_sbatch_file <- function(sbatch_file_name, output_directory, parameter_c
                "#SBATCH --time=60:00:00",
                "#SBATCH --partition=cobey",
                "#SBATCH --nodes=1",
+               "#SBATCH --exclude=midway2-bigmem05",
                paste("#SBATCH --ntasks=", n_cores, sep = ''),
                "#SBATCH --mem-per-cpu=1000",
                "module load R/3.4.3",

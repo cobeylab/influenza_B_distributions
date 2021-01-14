@@ -52,7 +52,7 @@ lineage_frequencies <- bind_rows(gisaid_genbank_frequencies, surveillance_freque
 lineage_frequencies <- lineage_frequencies %>%
   mutate(country = factor(country,
                           levels = c('New Zealand','Australia','United States',
-                                     'Europe','China','Japan', ' All countries')))
+                                     'Europe','East Asia', ' All countries')))
 
 # ---------------------------------------------------- Plots ---------------------------------------------------
 surveillance_vs_gisaid_genbank_freqs_pl <- ggplot(lineage_frequencies %>%
@@ -63,7 +63,8 @@ surveillance_vs_gisaid_genbank_freqs_pl <- ggplot(lineage_frequencies %>%
        aes(x = year, y = fraction_yamagata)) +
   geom_point(aes(color = factor(source)), alpha = 0.8) +
   geom_text(data = lineage_frequencies %>%
-              filter(is.na(fraction_yamagata) == F, source == 'Gisaid/Genbank (local)', year > 1983),
+              filter(country != 'All countries',
+                     is.na(fraction_yamagata) == F, source == 'Gisaid/Genbank (local)', year > 1983),
                      aes(label = year_total), color = 'blue',
             position = position_nudge(x = 0, y = 0.1), size = 3) +
   geom_text(data = lineage_frequencies %>%
@@ -78,7 +79,8 @@ surveillance_vs_gisaid_genbank_freqs_pl <- ggplot(lineage_frequencies %>%
   scale_x_continuous(breaks = seq(1982,2020,2), limits = c(1982, 2020)) +
   scale_color_manual(values = c('blue','orange'), name = 'Source',
                      labels = c('Gisaid/Genbank', 'surveillance reports')) +
-  theme(legend.position = 'top', axis.text.x = element_text(size = 9))
+  theme(legend.position = 'top', axis.text.x = element_text(size = 9)) +
+  scale_y_continuous(limits = c(0,1.2), breaks = seq(0,1,0.25))
 
 save_plot('../figures/lineage_frequencies/surveillance_vs_gisaid_genbank_freqs.pdf',
           surveillance_vs_gisaid_genbank_freqs_pl,
@@ -101,7 +103,7 @@ points <- bind_rows(local_points, global_points) %>% arrange(year)
 
 
 lineage_frequencies_gisaid_genbank_noVicin1990s <- 
-  ggplot(lineage_frequencies %>% filter(source == "Gisaid/Genbank (All countries + no Vic in 1990s)",
+  ggplot(lineage_frequencies %>% filter(country == 'New Zealand', source == "Gisaid/Genbank (All countries + no Vic in 1990s)",
                                       year >= 1988), aes(x = year, y = fraction_yamagata)) +
   geom_line(alpha = 0.5) + 
   geom_point(data = points, shape = 21, size = 6, (aes(fill = source))) +
