@@ -454,7 +454,11 @@ calculate_iprobs_byear <- function(birth_year, min_obs_year, max_obs_year, count
   #print(paste(country_name, birth_year))
   
   # Read split year off of lineage frequency data
-  split_year = lineage_frequencies %>% filter(fraction_yamagata == 0, fraction_victoria == 0) %>%
+  split_year = lineage_frequencies %>% 
+    mutate(country = as.character(country)) %>%
+    mutate(country = ifelse(country == 'East Asia','China',country)) %>%
+    filter(country == country_name) %>%
+    filter(fraction_yamagata == 0, fraction_victoria == 0) %>%
     summarise(M = max(year)) %>% pull(M) +1
   
   # Get attack rates for seasons following birth

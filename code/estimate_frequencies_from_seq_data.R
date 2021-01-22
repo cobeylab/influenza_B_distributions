@@ -221,6 +221,20 @@ lineage_frequencies_gisaid_genbank_noVicin1990s <- lineage_frequency_data$adjust
 write.csv(lineage_frequencies_gisaid_genbank_noVicin1990s,
           paste0(output_directory, 'lineage_frequencies_gisaid-genbank_noVicin1990s.csv'), row.names = F)
 
+# Lineage frequencies assuming Vic was dominant from 1983 to 1990, then Yam was dominant
+lineage_frequencies_gisaid_genbank_Vicin80s_Yamin90s <- lineage_frequencies_gisaid_genbank_noVicin1990s %>%
+  mutate(fraction_yamagata = ifelse(year>= 1983 & year < 1990 & country != 'East Asia' , 0, fraction_yamagata),
+         fraction_victoria = ifelse(year>= 1983 & year < 1990 & country != 'East Asia', 1, fraction_victoria),
+         fraction_ancestor = ifelse(year>= 1983 & year < 1990 & country != 'East Asia', 0, fraction_ancestor),
+         n_yamagata = ifelse(year>= 1983 & year < 1990 & country != 'East Asia', NA, n_yamagata),
+         n_victoria = ifelse(year>= 1983 & year < 1990 & country != 'East Asia', NA, n_victoria),
+         year_total = ifelse(year>= 1983 & year < 1990 & country != 'East Asia', NA, year_total),
+        data_source = ifelse(year>= 1983 & year <= 2000 & country != 'East Asia',
+                     'assuming_vic_in_80s_yam_in_90s', data_source))
+
+write.csv(lineage_frequencies_gisaid_genbank_Vicin80s_Yamin90s,
+          paste0(output_directory, 'lineage_frequencies_gisaid-genbank_Vicin80s_Yamin90s.csv'), row.names = F)
+
 # ----------------------------- Plots with fraction Yamagata over time ----------------------
 # Plot with adjusted fraction
 yam_freq_ausnz <- ggplot(lineage_frequency_data$adjusted %>% filter(year >=1984, country == 'New Zealand',

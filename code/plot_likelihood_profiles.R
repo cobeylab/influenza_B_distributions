@@ -159,7 +159,9 @@ plot_likprof <- function(profile_csv_path, true_parameter_values_path, convert_g
     
   # If path to true parameter values provided (synth. data), retrieve them
   if(is.na(true_parameter_values_path) == F){
-    true_par_values <- get_true_par_values(true_parameter_values_path, profiled_parameters = parameters)
+    true_par_values <- as_tibble(read.csv(true_parameter_values_path)) %>%
+      filter(par %in% parameters) %>%
+      pull(value)
   }
   
   # Interpolate
@@ -212,12 +214,7 @@ plot_likprof <- function(profile_csv_path, true_parameter_values_path, convert_g
       geom_line(data = interp_profile) +
       geom_point(data = lik_profile) +
       geom_hline(yintercept = max(lik_profile$loglik) - qchisq(0.95, 1)/2, linetype = 2) +
-      geom_vline(xintercept = CI_limits, linetype = 2) +
-      ggtitle(paste('MLE = ', round(par1_mle,2), '; 95% CI ',
-                    round(CI_limits[1],2), '-',
-                    round(CI_limits[2],2), '',
-                    sep = '')
-      ) + ylab('Log-likelihood')
+      geom_vline(xintercept = CI_limits, linetype = 2) + ylab('Log-likelihood')
     
     # If synthetic data, plot true parameter value as vertical line
     if(is.na(true_parameter_values_path) == F){
@@ -225,7 +222,14 @@ plot_likprof <- function(profile_csv_path, true_parameter_values_path, convert_g
         geom_vline(xintercept = true_par_values, color = 'blue') +
         annotate("text", x = 1.04*true_par_values,
                  y = min(lik_profile$loglik),
-                 label = paste(true_par_values)) 
+                 label = paste(round(true_par_values,2))) 
+    }else{
+      lik_profile_pl <- lik_profile_pl +
+        ggtitle(paste('MLE = ', round(par1_mle,2), '; 95% CI ',
+                      round(CI_limits[1],2), '-',
+                      round(CI_limits[2],2), '',
+                      sep = '')
+        ) 
     }
   }
   if('chi_VY' %in% parameters & 'chi_YV' %in% parameters){
@@ -239,8 +243,7 @@ main <- function(main_directory, is_synthetic){
                                    recursive = F)
   profile_directories <- str_replace(profile_directories,'//','/')
   if(is_synthetic){
-    ####### REVISE true_parameter_values_path <- list.files(main_directory, pattern = 'pars.txt')
-    ####### REVISE true_parameter_values_path <- paste0(main_directory, true_parameter_values_path)
+    true_parameter_values_path <- list.files(main_directory, pattern = 'true_pars', full.names = T)
   }else{
     true_parameter_values_path <- NA
   }

@@ -176,4 +176,24 @@ vaccine_coverage_nz_2016 <- as_tibble(read.csv('../data/vaccine_coverage_nz_2016
 left_join(nz_demographics_2016_by_age_group, vaccine_coverage_nz_2016, by = 'age_group') %>%
   mutate(age_group = factor(age_group, levels = age_group_levels)) %>%
   mutate(coverage = n_vaccines_distributed/n_persons * 100) %>% arrange(age_group)
+
+# Quick calculations for reviewer's response:
+# Assuming vaccination happens before infection for those vaccinated,
+#0.518/100 + # Vaccinated at age 0 before the first infection
+# (1 - 2.36/100) *  2.36/100 * (1 - 0.09) + # First vaccinated at age 1 before the first infection
+#  (1 - 2.36/100)^2 * 2.36/100 * (1 - 0.09)^2 + # First vaccinated at age 2 before the first infection
+#  (1 - 2.36/100)^3 * 2.36/100 * (1 - 0.09)^3 + # First vaccinated at age 3 before the first infection
+#  (1 - 2.36/100)^4 * 2.36/100 * (1 - 0.09)^4  + # First vaccinated at age 4 before the first infection
+#  (1 - 2.36/100)^5 * 2.36/100 * (1 - 0.09)^5  # First vaccinated at age 5 before the first infection
+  
+#(1 - 2.36/100) * 0.09 + # First infected at age 0 before first vaccination
+#  (1 - 2.36/100)^2 * (1 - 0.09) * 0.09 + # First infected at age 1 before first vaccination
+#  (1 - 2.36/100)^3 * (1 - 0.09)^2 * 0.09 + # First infected at age 2 before first vaccination
+#  (1 - 2.36/100)^4 * (1 - 0.09)^3 * 0.09 + # First infected at age 3 before first vaccination
+#  (1 - 2.36/100)^5 * (1 - 0.09)^4 * 0.09 + # First infected at age 4 before first vaccination
+#  (1 - 2.36/100)^6 * (1 - 0.09)^5 * 0.09 # First infected at age 4 before first vaccination
+
+  
+  
+
   
