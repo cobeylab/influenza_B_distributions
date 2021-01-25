@@ -245,7 +245,8 @@ main <- function(){
             base_height = 6, base_width =11)
   
   fraction_cases_pooled_normalized <- plot_pooling_countries(predictions, n_CI_replicates, CI_alpha,plot_predictions = T,
-                                                             plot_fraction = T, demographic_normalization = T)
+                                                             plot_fraction = T, demographic_normalization = T) +
+    geom_hline(yintercept = 1, linetype = 2)
   
   
   save_plot(paste0(plot_directory,'fraction_cases_pooled_normalized.pdf'),
@@ -278,10 +279,12 @@ main <- function(){
   
   save_plot(paste0(plot_directory,'fraction_cases_pooled_panel.pdf'),
             plot_grid(fraction_cases_pooled + ylab(''),
-                      fraction_cases_pooled_normalized + ylab('') + 
-                        ylim(0,6)+
+                      fraction_cases_pooled_normalized + ylab('') +
+                        scale_y_continuous(breaks = c(0,2,4,6),
+                                           labels = c('0.00','2.00','4.00','6.00'),
+                                           limits = c(0,6)),
                         #scale_y_continuous(breaks = seq(-0.03,0.06,0.03)) +
-                        theme(axis.text.y = element_text(size = 8.7)),
+                        #theme(axis.text.y = element_text(size = 8.7)),
                       nrow = 2),
             base_height = 10, base_width =9)
   
