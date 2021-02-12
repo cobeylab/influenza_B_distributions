@@ -60,7 +60,7 @@ full_join(raw_sentinel_cases %>% rename(n_sentinel = n_cases),
   geom_text(aes(label = minimum_birth_year)) +
   facet_grid(.~lineage)
 
-full_join(raw_sentinel_cases %>% rename(n_sentinel = n_cases),
+sentinel_vs_nonsentinel_by_obs_year <- full_join(raw_sentinel_cases %>% rename(n_sentinel = n_cases),
           raw_nonsentinel_cases %>% rename(n_nonsentinel = n_cases),
           by = c('country','region','observation_year', 'cohort_type','cohort_value','minimum_birth_year','lineage')) %>%
   group_by(observation_year, lineage) %>%
@@ -74,10 +74,17 @@ full_join(raw_sentinel_cases %>% rename(n_sentinel = n_cases),
   #       !(lineage == 'B/Yamagata' & observation_year == 2002),
   #       !(lineage == 'B/Yamagata' & observation_year == 2003)) %>%
   ggplot(aes(x = minimum_birth_year)) +
-  geom_col(aes(y = n_sentinel), color = 'red', fill = 'red', alpha = 0.7) +
-  geom_col(aes(y = n_nonsentinel), fill = 'blue', alpha = 0.7) +
+  geom_col(aes(y = n_sentinel), color = 'goldenrod1', fill = 'goldenrod1', alpha = 0.7) +
+  geom_col(aes(y = n_nonsentinel), fill = 'aquamarine4', alpha = 0.7) +
   facet_grid(observation_year~lineage, scales = 'free_y') +
-  ggtitle('Year/lineage combinations with few cases omitted\nto improve visualization')
+  xlab('Year of birth') +
+  ylab('Number of cases')  +
+  background_grid() +
+  theme(axis.text.y = element_text(size = 8))
+save_plot('../figures/sentinel_vs_nonsentinel_by_obs_year.pdf',
+          sentinel_vs_nonsentinel_by_obs_year,
+          base_width = 7, base_height = 8)
+#+ ggtitle('Year/lineage combinations with few cases omitted\nto improve visualization')
 
 #Plot showing complete age distributions
 # Including Australia

@@ -236,29 +236,30 @@ write.csv(lineage_frequencies_gisaid_genbank_Vicin80s_Yamin90s,
           paste0(output_directory, 'lineage_frequencies_gisaid-genbank_Vicin80s_Yamin90s.csv'), row.names = F)
 
 # ----------------------------- Plots with fraction Yamagata over time ----------------------
-# Plot with adjusted fraction
+# Plot with global frequencies in the 1990s
 yam_freq_ausnz <- ggplot(lineage_frequency_data$adjusted %>% filter(year >=1984, country == 'New Zealand',
                                               data_source!= 'presumed_ancestor'),
                                      aes(x = year, y = fraction_yamagata, label = year_total)) +
-  geom_line(alpha = 0.5) + geom_point(shape = 21, size = 6, (aes(fill = data_source))) +
-  geom_text(size = 2) +
+  geom_line(alpha = 0.5) + geom_point(shape = 21, size = 6, aes(fill = data_source)) +
+  geom_text(size = 2, aes(color = data_source), show.legend = F) +
   xlab('Season') + ylab('Frequency of B/Yamagata') +
   scale_x_continuous(breaks = seq(1970,2020,5), limits = c(1970,2020),
                      expand = c(0.01,0)) +
   #facet_grid(region~.) +
   scale_fill_brewer(type = 'qual', palette = 3, name = 'Data source:',
-                    labels = c('All represented countries', 'Australia/New Zealand')) +
+                    labels = c('All represented countries', 'New Zealand/Australia')) +
   theme(legend.position = c(0.02,0.9)) +
-  geom_vline(xintercept = c(1970,1983), linetype = 2, color = 'gray30')  +
-  geom_text(data = tibble(year = 1976.5,
+  geom_vline(xintercept = c(1983), linetype = 2, color = 'gray30')  +
+  geom_text(data = tibble(year = 1983,
                           #region = c('Australia / New Zealand', 'China', 'United States'),
                           #region = c('Australia / New Zealand','United States'),
                           fraction_yamagata = 0.55,
                           #text = c('','Approximate interval of\nB/Vic - B/Yam split','')),
-                          text = c('Estimates of\nB/Vic - B/Yam split','')),
-            aes(label = text))
+                          text = c('Estimate of\nB/Vic - B/Yam split','')),
+            aes(label = text)) +
+  scale_color_manual(values = c('black','white'))
 
-save_plot('../figures/lineage_frequencies/lineage_frequencies_gisaid-genbank_ausnz.pdf',
+save_plot('../figures/lineage_frequencies/lineage_frequencies_global_1990s.pdf',
           yam_freq_ausnz,base_width = 12, base_height = 4)
 
 
