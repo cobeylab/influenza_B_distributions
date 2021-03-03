@@ -7,4 +7,3 @@ school_start_age <- tibble(country = c('United States','Australia','New Zealand'
 oldest_atk_rate_age <- 18 # Age at which the oldest attack rate bin starts.
 
 birth_year_cutoff <- 1970 # For birth years prior to this year, repeat this year's infection history probabilities
-

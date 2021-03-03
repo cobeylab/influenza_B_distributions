@@ -22,6 +22,12 @@ bind_rows(nz_data$`case_data_nz_2001-2012_all_surveillance_untyped_assigned`,
           nz_data$`case_data_nz_2012-2019_all_surveillance_untyped_assigned`) %>%
   write.csv('../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv', row.names = F)
 
+# Case data with assignment of unidentified cases but removing children < 10 years old
+bind_rows(nz_data$`case_data_nz_2001-2012_all_surveillance_untyped_assigned`,
+          nz_data$`case_data_nz_2012-2019_all_surveillance_untyped_assigned`) %>%
+  filter(cohort_value >= 10) %>%
+  write.csv('../results/processed_data/case_data_nz_all_surveillance_untyped_assigned_no_children.csv', row.names = F)
+
 # Data from sentinel cases only (meaning GP, since hospitalizations post 2012 are labelled sentinel by ESR)
 # No overlap since 2012 data from second batch are all hospitalizations...
 bind_rows(nz_data$`case_data_nz_2001-2012_sentinel_only_untyped_assigned`,
@@ -138,26 +144,17 @@ aggregated_all_surveillance_distribution <- case_data_nz_all_surveillance %>%
   mutate(fraction_cases = n_cases/total_cases) %>%
   ungroup()
 
-aggregated_all_surveillance_distribution_pl <- aggregated_all_surveillance_distribution %>%
-  ggplot(aes(x = minimum_birth_year, y = fraction_cases, color = lineage)) +
-  geom_line() +
-  geom_point() +
-  scale_x_continuous(breaks = seq(1960,2020,5), limits = c(1959,2020),
-                     expand = c(0.01,0)) +
-  #scale_y_continuous(expand = c(0.005,0)) +
-  theme(axis.text.x = element_text(size = 12),
-        legend.position = 'None') +
-  ylab('Fraction of cases') + xlab ('Year of birth') +
-  scale_color_manual(name = '',
-                     labels = c('B/Victoria','B/Yamagata'),
-                     values = c('darkorange1','mediumpurple3'))
-  save_plot('../figures/byear_distribution_nz_allsurveillance.pdf',aggregated_all_surveillance_distribution_pl,
-            base_height = 4, base_width = 10)
-  
-  
+aggregated_all_surveillance_distribution_by_age <- case_data_nz_all_surveillance %>%
+  group_by(lineage, cohort_value) %>%
+  summarise(n_cases = sum(n_cases, na.rm = T)) %>%
+  ungroup() %>% group_by(lineage) %>%
+  mutate(total_cases = sum(n_cases)) %>%
+  mutate(fraction_cases = n_cases/total_cases) %>%
+  ungroup()
+
   
 # Alternative plot per Katia's suggestion
-  aggregated_all_surveillance_distribution_histograms <- aggregated_all_surveillance_distribution %>%
+aggregated_all_surveillance_distribution_histograms <- aggregated_all_surveillance_distribution %>%
   ggplot(aes(x = minimum_birth_year, y = fraction_cases)) +
   geom_col(data = aggregated_all_surveillance_distribution %>% filter(lineage == 'B/Victoria'),
              fill = 'darkorange1', alpha = 0.8) +
@@ -175,6 +172,27 @@ aggregated_all_surveillance_distribution_pl <- aggregated_all_surveillance_distr
 
 save_plot('../figures/byear_distribution_nz_allsurveillance.pdf',aggregated_all_surveillance_distribution_histograms,
           base_height = 4, base_width = 10)
+
+aggregated_all_surveillance_distribution_histograms_by_age <- aggregated_all_surveillance_distribution_by_age %>%
+  ggplot(aes(x = cohort_value, y = fraction_cases)) +
+  geom_col(data = aggregated_all_surveillance_distribution_by_age %>% filter(lineage == 'B/Victoria'),
+           fill = 'darkorange1', alpha = 0.8) +
+  geom_col(data = aggregated_all_surveillance_distribution_by_age %>% filter(lineage == 'B/Yamagata'),
+           fill = 'mediumpurple3', alpha = 0.7) +
+  scale_x_continuous(expand = c(0.01,0), limits = c(-0.5,60)) +
+  #scale_y_continuous(expand = c(0.005,0)) +
+  theme(axis.text.x = element_text(size = 12),
+        legend.position = 'None') +
+  ylab('Fraction of cases') + xlab ('Age') +
+  scale_color_manual(name = '',
+                     labels = c('B/Victoria','B/Yamagata'),
+                     values = c('darkorange1','mediumpurple3'))
+
+save_plot('../figures/age_distribution_nz_allsurveillance.pdf',aggregated_all_surveillance_distribution_histograms_by_age,
+          base_height = 4, base_width = 10)
+
+
+
 
 # ======================= CORRELATIONS BETWEEN AGE/B. YEAR AND OBSERVATION YEAR =====================
 uncounted_data <- as_tibble(case_data_nz_all_surveillance) %>% uncount(n_cases) %>%
