@@ -88,6 +88,10 @@ main <- function(){
   # Combine demographic and case data
   dem_plus_case_data <- merge_data(demographic_data, case_data)
   
+  if(exists('min_age')){
+    dem_plus_case_data <- impose_min_age(dem_plus_case_data, min_age)
+  }
+  
   # Read combined likelihood profile
   combined_profile <- as_tibble(read.csv(paste0(profiles_directory,
                                                 'combined_likelihood_profiles.csv'), header = T))

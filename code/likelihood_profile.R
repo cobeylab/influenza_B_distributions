@@ -41,6 +41,7 @@ initial_par_bounds_path = as.character(args[17]) # csv with intervals to sample 
 bounded_par_names <- as.character(args[18]) # Comma-separated list of pars with non-default bounds. Can be left as NA
 bounded_par_lbounds <- as.character(args[19]) # Comma-separated list of lower non-default bounds. Can be left as NA
 bounded_par_ubounds <- as.character(args[20]) # Comma-separated list of upper non-default bounds. Can be left as NA
+min_age <- as.integer(args[21]) # Excludes all ages < min_age
 
 if(!is.na(precomputed_history_probs_path) & is.na(bounded_par_names)){
   stop('Must constrain betas if using pre-computed infection history probabilities')
@@ -98,7 +99,8 @@ generate_par_files <- function(lower_limits, upper_limits, increments, selected_
                  paste0("initial_par_bounds_path = '", initial_par_bounds_path,"'"),
                  paste0("bounded_par_names = '", bounded_par_names,"'"),
                  paste0("bounded_par_lbounds = '", bounded_par_lbounds, "'"),
-                 paste0("bounded_par_ubounds = '", bounded_par_ubounds, "'")
+                 paste0("bounded_par_ubounds = '", bounded_par_ubounds, "'"),
+                 paste0("min_age = ", min_age)
                   ),
                 file_conn)
     close(file_conn)

@@ -33,6 +33,15 @@ normalize_demographic_data <- function(demographic_data, min_birth_year){
   return(demographic_data)
 }
 
+impose_min_age <- function(dem_plus_case_data, min_age){
+  dem_plus_case_data <- dem_plus_case_data %>% filter(cohort_value >= min_age) %>%
+    group_by(country, region, observation_year, lineage, cohort_type) %>%
+    mutate(rel_pop_size = rel_pop_size / sum(rel_pop_size)) %>%
+    mutate(CLY_total_cases = sum(n_cases)) %>%
+    ungroup()
+  return(dem_plus_case_data)
+}
+
 # Function for calculating min. and max. possible age for cohorts identified by age, b. year or age group
 calculate_age_bounds <- function(data){
   modified_data <- data %>%

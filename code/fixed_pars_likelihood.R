@@ -22,9 +22,14 @@ source('basic_parameters.R')
 
 # Read processed data files
 case_data <- as_tibble(read.csv(case_data_path))
+
+
 case_data <- set_min_birth_year(case_data, start_birth_year)
 
 demographic_data <- as_tibble(read.csv(demographic_data_path))
+
+
+
 demographic_data <- normalize_demographic_data(demographic_data, start_birth_year)
 
 intensity_scores <- as_tibble(read.csv(intensity_scores_path))
@@ -33,6 +38,11 @@ season_incidence_curves <- as_tibble(read.csv(season_incidence_curves_path))
 
 # Combine demographic and case data
 dem_plus_case_data <- merge_data(demographic_data, case_data)
+
+if(!is.na(min_age)){
+  min_age = as.integer(min_age)
+  dem_plus_case_data <- impose_min_age(dem_plus_case_data, min_age)
+}
 
 # Separate string of model parameter names into character vector
 selected_par_names <- strsplit(selected_par_names, split = ',')[[1]]

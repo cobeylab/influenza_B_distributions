@@ -22,12 +22,6 @@ bind_rows(nz_data$`case_data_nz_2001-2012_all_surveillance_untyped_assigned`,
           nz_data$`case_data_nz_2012-2019_all_surveillance_untyped_assigned`) %>%
   write.csv('../results/processed_data/case_data_nz_all_surveillance_untyped_assigned.csv', row.names = F)
 
-# Case data with assignment of unidentified cases but removing children < 10 years old
-bind_rows(nz_data$`case_data_nz_2001-2012_all_surveillance_untyped_assigned`,
-          nz_data$`case_data_nz_2012-2019_all_surveillance_untyped_assigned`) %>%
-  filter(cohort_value >= 10) %>%
-  write.csv('../results/processed_data/case_data_nz_all_surveillance_untyped_assigned_no_children.csv', row.names = F)
-
 # Data from sentinel cases only (meaning GP, since hospitalizations post 2012 are labelled sentinel by ESR)
 # No overlap since 2012 data from second batch are all hospitalizations...
 bind_rows(nz_data$`case_data_nz_2001-2012_sentinel_only_untyped_assigned`,
