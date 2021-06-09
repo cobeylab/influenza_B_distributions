@@ -198,7 +198,8 @@ main <- function(){
   
   return(list(adjusted = lineage_frequency_data_AUSNZ_adjusted, raw = lineage_frequency_data_raw,
               global = lineage_frequency_data_global,
-              global_minus_AUSNZ = lineage_frequency_data_global_minus_AUSNZ))
+              global_minus_AUSNZ = lineage_frequency_data_global_minus_AUSNZ,
+              combined_isolate_data = combined_isolate_data))
 }
 lineage_frequency_data <- main()
 write.csv(lineage_frequency_data$adjusted, paste0(output_directory, 'lineage_frequencies_gisaid-genbank.csv'), row.names = F)
@@ -303,6 +304,40 @@ AUSNZ_VS_global_pl <- AUSNZ_VS_global %>%
 save_plot('../figures/lineage_frequencies/global_vs_local_freqs.pdf',
           plot_grid(AUSNZ_VS_global_pl, AUSNZ_VS_US_pl, nrow = 1),
           base_width = 15, base_height = 6)
+
+# Export distribution of isolate data by country for Europe / East Asia 
+# (for isolates used to estimate lineage frequencies)
+
+
+combined_isolate_data <- lineage_frequency_data$combined_isolate_data
+
+east_asia_isolate_data_distribution <- combined_isolate_data %>% 
+  filter(region == 'East Asia', year >= 1983) %>%
+  rowwise() %>%
+  mutate(country = ifelse(country == 'Hong Kong (SAR)', 'China', country)) %>%
+  group_by(year, country) %>%
+  summarise(n_isolates = n()) %>%
+  group_by(year) %>%
+  mutate(total_isolates = sum(n_isolates),
+         fraction = n_isolates / total_isolates) %>%
+  mutate(data_type = 'Isolate data used to calculate lineage frequencies\n(East Asia)')
+write.csv(east_asia_isolate_data_distribution, '../results/processed_data/east_asia_lineage_freq_isolate_distribution.csv',
+          row.names = F)
+
+
+europe_isolate_data_distribution <- combined_isolate_data %>% 
+  filter(region == 'Europe', year >= 1983) %>%
+  group_by(year, country) %>%
+  summarise(n_isolates = n()) %>%
+  group_by(year) %>%
+  mutate(total_isolates = sum(n_isolates),
+                             fraction = n_isolates / total_isolates) %>% 
+  mutate(data_type = 'Isolate data used to calculate lineage frequencies\n(all European countries)')
+  
+
+# Export EU lineage frequ. isolate distribution so can plot together with age distribution isolate data
+write.csv(europe_isolate_data_distribution, '../results/processed_data/europe_lineage_freq_isolate_distribution.csv',
+          row.names = F)
 
 
 

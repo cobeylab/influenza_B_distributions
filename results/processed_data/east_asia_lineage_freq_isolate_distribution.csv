@@ -1,0 +1,245 @@
+"year","country","n_isolates","total_isolates","fraction","data_type"
+1983,"China",2,2,1,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1984,"Japan",1,1,1,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1985,"Japan",2,2,1,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1986,"China",2,2,1,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1987,"China",1,2,0.5,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1987,"Japan",1,2,0.5,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1988,"China",2,8,0.25,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1988,"Japan",3,8,0.375,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1988,"Korea, Republic of",2,8,0.25,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1988,"Taiwan",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1989,"China",3,4,0.75,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1989,"Japan",1,4,0.25,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1990,"China",2,3,0.666666666666667,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1990,"Japan",1,3,0.333333333333333,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1991,"China",5,7,0.714285714285714,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1991,"Japan",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1991,"Korea, Republic of",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1992,"China",10,12,0.833333333333333,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1992,"Japan",2,12,0.166666666666667,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1993,"China",18,22,0.818181818181818,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1993,"Japan",4,22,0.181818181818182,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1994,"China",9,11,0.818181818181818,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1994,"Japan",2,11,0.181818181818182,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1995,"China",12,16,0.75,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1995,"Japan",3,16,0.1875,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1995,"Taiwan",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1996,"China",38,42,0.904761904761905,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1996,"Japan",3,42,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1996,"Taiwan",1,42,0.0238095238095238,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1997,"China",26,68,0.382352941176471,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1997,"Japan",33,68,0.485294117647059,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1997,"Korea, Republic of",6,68,0.0882352941176471,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1997,"Taiwan",3,68,0.0441176470588235,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1998,"China",25,36,0.694444444444444,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1998,"Japan",11,36,0.305555555555556,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1999,"China",37,58,0.637931034482759,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1999,"Japan",15,58,0.258620689655172,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+1999,"Taiwan",6,58,0.103448275862069,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2000,"China",51,67,0.761194029850746,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2000,"Japan",3,67,0.0447761194029851,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2000,"Taiwan",13,67,0.194029850746269,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2001,"China",35,69,0.507246376811594,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2001,"Japan",13,69,0.188405797101449,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2001,"Taiwan",21,69,0.304347826086957,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2002,"China",47,92,0.510869565217391,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2002,"Japan",6,92,0.0652173913043478,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2002,"Taiwan",39,92,0.423913043478261,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2003,"China",49,84,0.583333333333333,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2003,"Japan",13,84,0.154761904761905,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2003,"Korea, Republic of",1,84,0.0119047619047619,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2003,"Taiwan",21,84,0.25,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2004,"China",63,122,0.516393442622951,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2004,"Japan",19,122,0.155737704918033,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2004,"Korea, Republic of",3,122,0.0245901639344262,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2004,"Taiwan",37,122,0.30327868852459,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2005,"China",101,197,0.512690355329949,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2005,"Japan",20,197,0.101522842639594,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2005,"Taiwan",76,197,0.385786802030457,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2006,"China",125,206,0.606796116504854,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2006,"Japan",1,206,0.00485436893203883,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2006,"Korea, Republic of",1,206,0.00485436893203883,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2006,"Taiwan",79,206,0.383495145631068,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2007,"China",135,161,0.838509316770186,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2007,"Japan",5,161,0.031055900621118,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2007,"Korea, Republic of",3,161,0.0186335403726708,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2007,"Mongolia",12,161,0.0745341614906832,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2007,"Taiwan",6,161,0.0372670807453416,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2008,"China",288,408,0.705882352941177,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2008,"Japan",99,408,0.242647058823529,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2008,"Korea, Republic of",18,408,0.0441176470588235,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2008,"Mongolia",3,408,0.00735294117647059,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2009,"China",543,693,0.783549783549784,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2009,"Japan",142,693,0.204906204906205,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2009,"Korea, Republic of",5,693,0.00721500721500722,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2009,"Taiwan",3,693,0.00432900432900433,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2010,"China",196,383,0.511749347258486,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2010,"Japan",143,383,0.373368146214099,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2010,"Korea, Republic of",30,383,0.0783289817232376,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2010,"Mongolia",14,383,0.0365535248041775,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2011,"China",164,514,0.319066147859922,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2011,"Japan",218,514,0.424124513618677,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2011,"Korea, Republic of",107,514,0.208171206225681,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2011,"Taiwan",25,514,0.0486381322957198,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2012,"China",77,280,0.275,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2012,"Japan",134,280,0.478571428571429,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2012,"Korea, Republic of",40,280,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2012,"Mongolia",10,280,0.0357142857142857,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2012,"Taiwan",19,280,0.0678571428571429,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2013,"China",102,313,0.325878594249201,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2013,"Japan",195,313,0.623003194888179,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2013,"Korea, Republic of",10,313,0.0319488817891374,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2013,"Taiwan",6,313,0.0191693290734824,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2014,"China",189,449,0.420935412026726,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2014,"Japan",208,449,0.463251670378619,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2014,"Korea, Republic of",29,449,0.0645879732739421,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2014,"Mongolia",6,449,0.0133630289532294,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2014,"Taiwan",17,449,0.0378619153674833,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2015,"China",393,626,0.62779552715655,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2015,"Japan",200,626,0.319488817891374,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2015,"Korea, Republic of",4,626,0.00638977635782748,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2015,"Mongolia",2,626,0.00319488817891374,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2015,"Taiwan",27,626,0.0431309904153355,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2016,"China",198,510,0.388235294117647,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2016,"Japan",280,510,0.549019607843137,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2016,"Korea, Republic of",2,510,0.00392156862745098,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2016,"Mongolia",8,510,0.0156862745098039,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2016,"Taiwan",22,510,0.0431372549019608,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2017,"China",464,777,0.597168597168597,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2017,"Japan",218,777,0.280566280566281,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2017,"Korea, Republic of",13,777,0.0167310167310167,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2017,"Mongolia",18,777,0.0231660231660232,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2017,"Taiwan",64,777,0.0823680823680824,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2018,"China",400,699,0.572246065808298,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2018,"Japan",239,699,0.341917024320458,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2018,"Korea, Republic of",22,699,0.0314735336194564,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2018,"Mongolia",12,699,0.0171673819742489,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2018,"Taiwan",26,699,0.0371959942775393,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2019,"China",310,583,0.531732418524871,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2019,"Japan",196,583,0.336192109777015,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2019,"Korea, Republic of",47,583,0.0806174957118353,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2019,"Mongolia",12,583,0.0205831903945112,"Isolate data used to calculate lineage frequencies
+(East Asia)"
+2019,"Taiwan",18,583,0.0308747855917667,"Isolate data used to calculate lineage frequencies
+(East Asia)"

@@ -1,0 +1,807 @@
+"year","country","n_isolates","total_isolates","fraction","data_type"
+1984,"Finland",2,2,1,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1985,"Russian Federation",1,1,1,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1986,"Russian Federation",1,1,1,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1987,"Finland",2,3,0.666666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1987,"United Kingdom",1,3,0.333333333333333,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1988,"Czech Republic",1,1,1,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Belarus",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Finland",10,27,0.37037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"France",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Germany",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Netherlands",4,27,0.148148148148148,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Portugal",2,27,0.0740740740740741,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Sweden",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"Switzerland",6,27,0.222222222222222,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1989,"United Kingdom",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1990,"Finland",3,6,0.5,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1990,"Russian Federation",3,6,0.5,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1992,"Finland",3,4,0.75,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1992,"Russian Federation",1,4,0.25,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1993,"Portugal",2,2,1,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"Belarus",1,14,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"France",1,14,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"Netherlands",2,14,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"Portugal",6,14,0.428571428571429,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"Russian Federation",3,14,0.214285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1994,"United Kingdom",1,14,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1995,"France",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1995,"Italy",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1995,"Netherlands",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1995,"Portugal",3,7,0.428571428571429,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1995,"Romania",1,7,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1996,"Belgium",1,13,0.0769230769230769,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1996,"Netherlands",1,13,0.0769230769230769,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1996,"Portugal",9,13,0.692307692307692,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1996,"Switzerland",1,13,0.0769230769230769,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1996,"United Kingdom",1,13,0.0769230769230769,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Finland",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"France",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Netherlands",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Romania",2,8,0.25,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Spain",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Sweden",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1997,"Switzerland",1,8,0.125,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Austria",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Croatia",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Czech Republic",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"France",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Latvia",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Norway",3,17,0.176470588235294,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Portugal",2,17,0.117647058823529,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Romania",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Spain",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Sweden",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"Switzerland",1,17,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1998,"United Kingdom",3,17,0.176470588235294,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1999,"Finland",1,6,0.166666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1999,"Norway",1,6,0.166666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1999,"Portugal",2,6,0.333333333333333,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1999,"Russian Federation",1,6,0.166666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+1999,"United Kingdom",1,6,0.166666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2000,"Italy",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2000,"Norway",6,16,0.375,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2000,"Portugal",7,16,0.4375,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2000,"Romania",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2000,"Russian Federation",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Belgium",5,86,0.0581395348837209,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Finland",5,86,0.0581395348837209,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Italy",41,86,0.476744186046512,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Norway",6,86,0.0697674418604651,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Russian Federation",3,86,0.0348837209302326,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"Spain",22,86,0.255813953488372,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2001,"United Kingdom",4,86,0.0465116279069767,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Finland",6,27,0.222222222222222,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Germany",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Italy",10,27,0.37037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Romania",2,27,0.0740740740740741,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Russian Federation",6,27,0.222222222222222,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Spain",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2002,"Switzerland",1,27,0.037037037037037,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2003,"Italy",6,9,0.666666666666667,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2003,"Norway",1,9,0.111111111111111,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2003,"United Kingdom",2,9,0.222222222222222,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"Italy",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"Netherlands",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"Portugal",1,16,0.0625,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"Romania",4,16,0.25,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"Russian Federation",3,16,0.1875,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2004,"United Kingdom",6,16,0.375,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"France",1,22,0.0454545454545455,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"Greece",1,22,0.0454545454545455,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"Italy",4,22,0.181818181818182,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"Russian Federation",6,22,0.272727272727273,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"Ukraine",2,22,0.0909090909090909,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2005,"United Kingdom",8,22,0.363636363636364,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Belarus",2,28,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"France",1,28,0.0357142857142857,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Germany",1,28,0.0357142857142857,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Italy",2,28,0.0714285714285714,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Norway",1,28,0.0357142857142857,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Russian Federation",7,28,0.25,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Spain",9,28,0.321428571428571,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"Ukraine",4,28,0.142857142857143,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2006,"United Kingdom",1,28,0.0357142857142857,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2007,"Italy",7,9,0.777777777777778,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2007,"Romania",1,9,0.111111111111111,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2007,"Ukraine",1,9,0.111111111111111,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Belgium",1,51,0.0196078431372549,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Finland",6,51,0.117647058823529,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"France",3,51,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Norway",5,51,0.0980392156862745,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Portugal",1,51,0.0196078431372549,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Russian Federation",4,51,0.0784313725490196,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Serbia",5,51,0.0980392156862745,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Spain",14,51,0.274509803921569,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Sweden",9,51,0.176470588235294,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2008,"Ukraine",3,51,0.0588235294117647,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Belgium",2,139,0.0143884892086331,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Finland",3,139,0.0215827338129496,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"France",4,139,0.0287769784172662,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Germany",5,139,0.0359712230215827,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Ireland",4,139,0.0287769784172662,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Italy",15,139,0.107913669064748,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Latvia",6,139,0.0431654676258993,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Norway",7,139,0.0503597122302158,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Portugal",34,139,0.244604316546763,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Russian Federation",11,139,0.079136690647482,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Slovakia",1,139,0.00719424460431655,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Slovenia",1,139,0.00719424460431655,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Spain",9,139,0.0647482014388489,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Sweden",13,139,0.0935251798561151,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Switzerland",2,139,0.0143884892086331,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"Ukraine",11,139,0.079136690647482,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2009,"United Kingdom",11,139,0.079136690647482,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Austria",1,179,0.00558659217877095,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Denmark",6,179,0.0335195530726257,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Estonia",1,179,0.00558659217877095,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Finland",1,179,0.00558659217877095,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"France",12,179,0.0670391061452514,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Greece",2,179,0.0111731843575419,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Iceland",1,179,0.00558659217877095,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Ireland",12,179,0.0670391061452514,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Italy",23,179,0.128491620111732,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Latvia",7,179,0.0391061452513966,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Malta",2,179,0.0111731843575419,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Norway",8,179,0.0446927374301676,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Portugal",5,179,0.0279329608938547,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Romania",3,179,0.0167597765363128,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Russian Federation",21,179,0.11731843575419,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Slovenia",2,179,0.0111731843575419,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Spain",42,179,0.23463687150838,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Sweden",21,179,0.11731843575419,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Switzerland",1,179,0.00558659217877095,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"Ukraine",4,179,0.0223463687150838,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2010,"United Kingdom",4,179,0.0223463687150838,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Austria",22,314,0.0700636942675159,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Belgium",4,314,0.0127388535031847,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Denmark",14,314,0.0445859872611465,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Finland",2,314,0.00636942675159236,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"France",11,314,0.035031847133758,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Germany",2,314,0.00636942675159236,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Greece",15,314,0.0477707006369427,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Ireland",23,314,0.0732484076433121,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Italy",9,314,0.0286624203821656,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Luxembourg",1,314,0.00318471337579618,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Norway",23,314,0.0732484076433121,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Portugal",7,314,0.0222929936305732,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Romania",1,314,0.00318471337579618,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Russian Federation",27,314,0.0859872611464968,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Slovenia",1,314,0.00318471337579618,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Spain",113,314,0.359872611464968,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Sweden",25,314,0.0796178343949045,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Switzerland",3,314,0.00955414012738853,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"Ukraine",2,314,0.00636942675159236,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2011,"United Kingdom",9,314,0.0286624203821656,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Austria",84,825,0.101818181818182,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Belarus",1,825,0.00121212121212121,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Belgium",10,825,0.0121212121212121,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Bosnia and Herzegovina",3,825,0.00363636363636364,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Bulgaria",6,825,0.00727272727272727,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Croatia",1,825,0.00121212121212121,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Czech Republic",4,825,0.00484848484848485,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Denmark",2,825,0.00242424242424242,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Estonia",8,825,0.0096969696969697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Finland",3,825,0.00363636363636364,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"France",36,825,0.0436363636363636,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Germany",4,825,0.00484848484848485,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Greece",8,825,0.0096969696969697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Hungary",7,825,0.00848484848484849,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Iceland",4,825,0.00484848484848485,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Ireland",32,825,0.0387878787878788,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Italy",109,825,0.132121212121212,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Lithuania",8,825,0.0096969696969697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Luxembourg",5,825,0.00606060606060606,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Malta",2,825,0.00242424242424242,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Moldova, Republic of",6,825,0.00727272727272727,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Netherlands",9,825,0.0109090909090909,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Norway",23,825,0.0278787878787879,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Poland",4,825,0.00484848484848485,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Portugal",45,825,0.0545454545454545,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Romania",9,825,0.0109090909090909,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Russian Federation",36,825,0.0436363636363636,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Serbia",8,825,0.0096969696969697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Slovakia",7,825,0.00848484848484849,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Slovenia",9,825,0.0109090909090909,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Spain",283,825,0.343030303030303,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Sweden",23,825,0.0278787878787879,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"Ukraine",21,825,0.0254545454545455,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2012,"United Kingdom",5,825,0.00606060606060606,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Austria",9,232,0.0387931034482759,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Belarus",2,232,0.00862068965517241,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Belgium",3,232,0.0129310344827586,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Bosnia and Herzegovina",2,232,0.00862068965517241,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Croatia",3,232,0.0129310344827586,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Estonia",1,232,0.00431034482758621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Finland",2,232,0.00862068965517241,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"France",17,232,0.0732758620689655,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Germany",8,232,0.0344827586206897,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Greece",1,232,0.00431034482758621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Hungary",2,232,0.00862068965517241,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Iceland",4,232,0.0172413793103448,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Ireland",4,232,0.0172413793103448,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Italy",13,232,0.0560344827586207,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Latvia",3,232,0.0129310344827586,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Netherlands",7,232,0.0301724137931034,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Norway",24,232,0.103448275862069,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Portugal",19,232,0.0818965517241379,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Romania",6,232,0.0258620689655172,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Russian Federation",14,232,0.0603448275862069,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Slovakia",1,232,0.00431034482758621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Slovenia",1,232,0.00431034482758621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Spain",41,232,0.176724137931034,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Sweden",16,232,0.0689655172413793,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Switzerland",5,232,0.021551724137931,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"Ukraine",15,232,0.0646551724137931,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2013,"United Kingdom",9,232,0.0387931034482759,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Aland Islands",1,838,0.00119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Austria",56,838,0.0668257756563246,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Belarus",1,838,0.00119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Belgium",15,838,0.0178997613365155,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Bulgaria",5,838,0.00596658711217184,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Cyprus",1,838,0.00119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Denmark",6,838,0.00715990453460621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Estonia",9,838,0.0107398568019093,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Finland",6,838,0.00715990453460621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"France",31,838,0.0369928400954654,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Germany",50,838,0.0596658711217184,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Greece",10,838,0.0119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Hungary",1,838,0.00119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Iceland",8,838,0.00954653937947494,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Ireland",24,838,0.0286396181384248,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Italy",66,838,0.0787589498806683,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Latvia",1,838,0.00119331742243437,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Luxembourg",6,838,0.00715990453460621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Macedonia, the former Yogoslav Republic of",4,838,0.00477326968973747,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Moldova, Republic of",9,838,0.0107398568019093,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Netherlands",14,838,0.0167064439140811,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Norway",40,838,0.0477326968973747,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Poland",3,838,0.0035799522673031,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Portugal",45,838,0.0536992840095465,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Romania",11,838,0.013126491646778,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Russian Federation",74,838,0.0883054892601432,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Serbia",7,838,0.00835322195704057,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Slovakia",7,838,0.00835322195704057,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Slovenia",12,838,0.0143198090692124,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Spain",196,838,0.233890214797136,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Sweden",24,838,0.0286396181384248,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Switzerland",6,838,0.00715990453460621,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"Ukraine",61,838,0.0727923627684964,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2014,"United Kingdom",28,838,0.0334128878281623,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Albania",11,1318,0.00834597875569044,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Austria",82,1318,0.0622154779969651,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Belgium",10,1318,0.00758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Bosnia and Herzegovina",2,1318,0.00151745068285281,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Bulgaria",20,1318,0.0151745068285281,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Croatia",3,1318,0.00227617602427921,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Cyprus",4,1318,0.00303490136570561,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Czech Republic",12,1318,0.00910470409711684,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Denmark",2,1318,0.00151745068285281,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Estonia",10,1318,0.00758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Finland",3,1318,0.00227617602427921,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"France",179,1318,0.135811836115326,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Germany",183,1318,0.138846737481032,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Greece",9,1318,0.00682852807283763,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Hungary",40,1318,0.0303490136570561,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Iceland",10,1318,0.00758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Ireland",15,1318,0.0113808801213961,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Italy",79,1318,0.0599393019726859,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Latvia",5,1318,0.00379362670713202,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Lithuania",3,1318,0.00227617602427921,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Luxembourg",12,1318,0.00910470409711684,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Macedonia, the former Yogoslav Republic of",1,1318,0.000758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Moldova, Republic of",1,1318,0.000758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Netherlands",37,1318,0.0280728376327769,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Norway",61,1318,0.0462822458270106,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Portugal",25,1318,0.0189681335356601,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Romania",21,1318,0.0159332321699545,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Russian Federation",58,1318,0.0440060698027314,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Serbia",9,1318,0.00682852807283763,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Slovakia",14,1318,0.0106221547799697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Slovenia",24,1318,0.0182094081942337,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Spain",140,1318,0.106221547799697,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Sweden",83,1318,0.0629742033383915,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Switzerland",5,1318,0.00379362670713202,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"Ukraine",1,1318,0.000758725341426404,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2015,"United Kingdom",144,1318,0.109256449165402,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Albania",1,1310,0.000763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Austria",10,1310,0.00763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Belgium",9,1310,0.00687022900763359,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Bosnia and Herzegovina",1,1310,0.000763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Bulgaria",4,1310,0.00305343511450382,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Croatia",4,1310,0.00305343511450382,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Czech Republic",1,1310,0.000763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Denmark",31,1310,0.0236641221374046,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Finland",14,1310,0.0106870229007634,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"France",49,1310,0.0374045801526718,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Germany",76,1310,0.0580152671755725,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Greece",18,1310,0.0137404580152672,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Hungary",4,1310,0.00305343511450382,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Iceland",5,1310,0.00381679389312977,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Ireland",36,1310,0.0274809160305344,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Italy",23,1310,0.0175572519083969,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Latvia",7,1310,0.00534351145038168,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Lithuania",9,1310,0.00687022900763359,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Luxembourg",2,1310,0.00152671755725191,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Macedonia, the former Yogoslav Republic of",1,1310,0.000763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Moldova, Republic of",15,1310,0.0114503816793893,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Montenegro",1,1310,0.000763358778625954,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Netherlands",47,1310,0.0358778625954198,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Norway",87,1310,0.066412213740458,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Poland",2,1310,0.00152671755725191,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Portugal",12,1310,0.00916030534351145,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Romania",15,1310,0.0114503816793893,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Russian Federation",129,1310,0.0984732824427481,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Serbia",4,1310,0.00305343511450382,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Slovakia",11,1310,0.0083969465648855,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Slovenia",24,1310,0.0183206106870229,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Spain",235,1310,0.179389312977099,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Sweden",89,1310,0.0679389312977099,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Switzerland",38,1310,0.0290076335877863,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"Ukraine",71,1310,0.0541984732824427,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2016,"United Kingdom",225,1310,0.17175572519084,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Albania",5,2435,0.00205338809034908,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Austria",130,2435,0.053388090349076,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Belarus",2,2435,0.00082135523613963,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Belgium",66,2435,0.0271047227926078,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Bosnia and Herzegovina",11,2435,0.00451745379876797,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Bulgaria",15,2435,0.00616016427104723,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Cyprus",15,2435,0.00616016427104723,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Denmark",76,2435,0.031211498973306,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Estonia",9,2435,0.00369609856262834,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Finland",27,2435,0.011088295687885,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"France",195,2435,0.080082135523614,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Germany",158,2435,0.0648870636550308,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Greece",32,2435,0.0131416837782341,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Hungary",6,2435,0.00246406570841889,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Iceland",14,2435,0.00574948665297741,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Ireland",107,2435,0.0439425051334702,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Italy",78,2435,0.0320328542094456,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Lithuania",1,2435,0.000410677618069815,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Luxembourg",19,2435,0.00780287474332649,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Macedonia, the former Yogoslav Republic of",13,2435,0.0053388090349076,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Malta",8,2435,0.00328542094455852,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Montenegro",3,2435,0.00123203285420945,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Netherlands",118,2435,0.0484599589322382,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Norway",32,2435,0.0131416837782341,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Poland",31,2435,0.0127310061601643,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Portugal",106,2435,0.0435318275154004,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Romania",103,2435,0.042299794661191,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Russian Federation",141,2435,0.0579055441478439,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Serbia",22,2435,0.00903490759753593,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Slovenia",14,2435,0.00574948665297741,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Spain",246,2435,0.101026694045175,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Sweden",68,2435,0.0279260780287474,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Switzerland",25,2435,0.0102669404517454,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"Ukraine",44,2435,0.0180698151950719,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2017,"United Kingdom",495,2435,0.203285420944559,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Austria",9,691,0.0130246020260492,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Belgium",3,691,0.00434153400868307,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Croatia",2,691,0.00289435600578871,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Denmark",5,691,0.00723589001447178,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Finland",8,691,0.0115774240231548,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"France",53,691,0.0767004341534009,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Germany",7,691,0.0101302460202605,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Greece",9,691,0.0130246020260492,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Iceland",3,691,0.00434153400868307,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Ireland",14,691,0.020260492040521,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Italy",16,691,0.0231548480463097,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Latvia",7,691,0.0101302460202605,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Lithuania",1,691,0.00144717800289436,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Luxembourg",6,691,0.00868306801736614,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Macedonia, the former Yogoslav Republic of",1,691,0.00144717800289436,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Montenegro",2,691,0.00289435600578871,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Netherlands",5,691,0.00723589001447178,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Norway",57,691,0.0824891461649783,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Portugal",61,691,0.0882778581765557,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Romania",42,691,0.060781476121563,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Russian Federation",204,691,0.295224312590449,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Slovenia",2,691,0.00289435600578871,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Spain",104,691,0.150506512301013,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Sweden",30,691,0.0434153400868307,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Switzerland",7,691,0.0101302460202605,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"Ukraine",3,691,0.00434153400868307,"Isolate data used to calculate lineage frequencies
+(all European countries)"
+2018,"United Kingdom",30,691,0.0434153400868307,"Isolate data used to calculate lineage frequencies
+(all European countries)"

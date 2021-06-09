@@ -172,4 +172,28 @@ age_dist_by_season_china <- gisaid_china_data_by_lineage_and_age %>%
 save_plot('../figures/gisaid_age_dist_china_by_season.pdf', age_dist_by_season_china,
           base_height = 10, base_width = 9)
 
+isolate_data_by_country_EU <- gisaid_data_by_lineage_and_age %>%
+  filter(continent == 'Europe', !(country %in% countries_outside_EU)) %>%
+  group_by(year,country) %>%
+  summarise(n_isolates = n()) %>%
+  group_by(year) %>%
+  mutate(total_isolates = sum(n_isolates),
+         fraction = n_isolates / total_isolates) %>%
+  ungroup()
 
+isolate_data_by_country_EU  %>%
+  group_by(country) %>%
+  summarise(n_isolates = sum(n_isolates)) %>%
+  ungroup() %>%
+  arrange(desc(n_isolates)) %>%
+  mutate(fraction = n_isolates / sum(n_isolates),
+         cum_fraction = cumsum(fraction))
+
+
+# Export distribution by country of isolates used to fit age distributions in the EU
+# (for plotting together with the distribution by country of isolates used to calculate lin. freqs.)
+isolate_data_by_country_EU <- isolate_data_by_country_EU %>%
+  mutate(data_type = 'Isolate data used to fit age distributions (European Union only)')
+
+write.csv(isolate_data_by_country_EU, '../results/processed_data/europe_age_dist_isolate_distribution.csv',
+          row.names = F)

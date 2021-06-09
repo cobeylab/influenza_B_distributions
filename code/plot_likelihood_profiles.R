@@ -263,7 +263,7 @@ main <- function(main_directory, is_synthetic){
   profile_plots <- lapply(profile_csv_paths, FUN = plot_likprof,
               true_parameter_values_path = true_parameter_values_path)
   names(profile_plots) <- profiled_parameters
-
+s
   # Note that we've inverted the order of the subscript cross-lineage protection in the labels for the manuscript
   main_panel <- plot_grid(
     profile_plots$chi_V + 
@@ -317,10 +317,12 @@ main <- function(main_directory, is_synthetic){
                                   profile_plots$beta3 + 
                                     xlab('Attack rate for 18+ year-olds') +
                                     ylab(''),
+                                  profile_plots$reporting_factor +
+                                    xlab('Reporting factor') + ylab(''),
                                   #profile_plots$reporting_factor_aus + 
-                                  #  xlab('Reporting factor for children 0-4\n(Australia)'),
-                                  profile_plots$reporting_factor_nz+ 
-                                    xlab('Reporting factor for children 0-4 (New Zealand)'),
+                                  #  xlab('Reporting factor for children 0-1\n(Australia)'),
+                                  #profile_plots$reporting_factor_nz+ 
+                                  #  xlab('Reporting factor for children 0-1 (New Zealand)'),
                                   ncol = 2)
   save_plot(paste0(main_directory,
                    'likelihood_profiles/attack_rates_and_reporting_factors.pdf'),
